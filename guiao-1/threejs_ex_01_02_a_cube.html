@@ -49,36 +49,38 @@
 
 	<script type="text/javascript">
 
-        function createRubiksCube() {
-            addCubeToScene(1, -15, -15, -15, 0x0000ff, scene);
-			addCubeToScene(1, 0, -15, -15, 0x0000ff, scene);
-			addCubeToScene(1, 15, -15, -15, 0x0000ff, scene);
-            addCubeToScene(1, -15, -15, 0, 0x0000ff, scene);
-			addCubeToScene(1, 0, -15, 0, 0x0000ff, scene);
-			addCubeToScene(1, 15, -15, 0, 0x0000ff, scene);
-            addCubeToScene(1, -15, -15, 15, 0x0000ff, scene);
-			addCubeToScene(1, 0, -15, 15, 0x0000ff, scene);
-			addCubeToScene(1, 15, -15, 15, 0x0000ff, scene);
+        function createRubiksCube(d, scene) {
+            var offset = d / 2;
 
-            addCubeToScene(1, -15, 0, -15, 0x00ff00, scene);
-			addCubeToScene(1, 0, 0, -15, 0x00ff00, scene);
-			addCubeToScene(1, 15, 0, -15, 0x00ff00, scene);
-            addCubeToScene(1, -15, 0, 0, 0x00ff00, scene);
-			addCubeToScene(1, 0, 0, 0, 0x00ff00, scene);
-			addCubeToScene(1, 15, 0, 0, 0x00ff00, scene);
-            addCubeToScene(1, -15, 0, 15, 0x00ff00, scene);
-			addCubeToScene(1, 0, 0, 15, 0x00ff00, scene);
-			addCubeToScene(1, 15, 0, 15, 0x00ff00, scene);
+            addCubeToScene(d, -d - offset, -d - offset, -d - offset, 0x0000ff, scene);
+			addCubeToScene(d, 0, -d - offset, -d - offset, 0x0000ff, scene);
+			addCubeToScene(d, d + offset, -d - offset, -d - offset, 0x0000ff, scene);
+            addCubeToScene(d, -d - offset, -d - offset, 0, 0x0000ff, scene);
+			addCubeToScene(d, 0, -d - offset, 0, 0x0000ff, scene);
+			addCubeToScene(d, d + offset, -d - offset, 0, 0x0000ff, scene);
+            addCubeToScene(d, -d - offset, -d - offset, d + offset, 0x0000ff, scene);
+			addCubeToScene(d, 0, -d - offset, d + offset, 0x0000ff, scene);
+			addCubeToScene(d, d + offset, -d - offset, d + offset, 0x0000ff, scene);
 
-            addCubeToScene(1, -15, 15, -15, 0xff0000, scene);
-			addCubeToScene(1, 0, 15, -15, 0xff0000, scene);
-			addCubeToScene(1, 15, 15, -15, 0xff0000, scene);
-            addCubeToScene(1, -15, 15, 0, 0xff0000, scene);
-			addCubeToScene(1, 0, 15, 0, 0xff0000, scene);
-			addCubeToScene(1, 15, 15, 0, 0xff0000, scene);
-            addCubeToScene(1, -15, 15, 15, 0xff0000, scene);
-			addCubeToScene(1, 0, 15, 15, 0xff0000, scene);
-			addCubeToScene(1, 15, 15, 15, 0xff0000, scene);
+            addCubeToScene(d, -d - offset, 0, -d - offset, 0x00ff00, scene);
+			addCubeToScene(d, 0, 0, -d - offset, 0x00ff00, scene);
+			addCubeToScene(d, d + offset, 0, -d - offset, 0x00ff00, scene);
+            addCubeToScene(d, -d - offset, 0, 0, 0x00ff00, scene);
+			addCubeToScene(d, 0, 0, 0, 0x00ff00, scene);
+			addCubeToScene(d, d + offset, 0, 0, 0x00ff00, scene);
+            addCubeToScene(d, -d - offset, 0, d + offset, 0x00ff00, scene);
+			addCubeToScene(d, 0, 0, d + offset, 0x00ff00, scene);
+			addCubeToScene(d, d + offset, 0, d + offset, 0x00ff00, scene);
+
+            addCubeToScene(d, -d - offset, d + offset, -d - offset, 0xff0000, scene);
+			addCubeToScene(d, 0, d + offset, -d - offset, 0xff0000, scene);
+			addCubeToScene(d, d + offset, d + offset, -d - offset, 0xff0000, scene);
+            addCubeToScene(d, -d - offset, d + offset, 0, 0xff0000, scene);
+			addCubeToScene(d, 0, d + offset, 0, 0xff0000, scene);
+			addCubeToScene(d, d + offset, d + offset, 0, 0xff0000, scene);
+            addCubeToScene(d, -d - offset, d + offset, d + offset, 0xff0000, scene);
+			addCubeToScene(d, 0, d + offset, d + offset, 0xff0000, scene);
+			addCubeToScene(d, d + offset, d + offset, d + offset, 0xff0000, scene);
         }
 
         // Add a cube to the scene
@@ -154,6 +156,7 @@
 			// The SCENE
 			var scene = new THREE.Scene();
 
+            // createRubiksCube(2, scene);
 			mengerSponge(10, 0, 0, 0, 0xffffff, scene, 2);
 
             const light = new THREE.PointLight(0xffffff, 3, 100);
