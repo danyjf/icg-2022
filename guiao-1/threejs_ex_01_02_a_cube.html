@@ -115,38 +115,37 @@
             }
 
             d /= 3.0;
-            depth--;
 
             // bottom
-            mengerSponge(d, x - d, y - d, z + d, color, scene, depth);
-            mengerSponge(d, x, y - d, z + d, color, scene, depth);
-            mengerSponge(d, x + d, y - d, z + d, color, scene, depth);
+            mengerSponge(d, x - d, y - d, z + d, color, scene, depth - 1);
+            mengerSponge(d, x, y - d, z + d, color, scene, depth - 1);
+            mengerSponge(d, x + d, y - d, z + d, color, scene, depth - 1);
 
-            mengerSponge(d, x - d, y - d, z, color, scene, depth);
-            mengerSponge(d, x + d, y - d, z, color, scene, depth);
+            mengerSponge(d, x - d, y - d, z, color, scene, depth - 1);
+            mengerSponge(d, x + d, y - d, z, color, scene, depth - 1);
             
-            mengerSponge(d, x - d, y - d, z - d, color, scene, depth);
-            mengerSponge(d, x, y - d, z - d, color, scene, depth);
-            mengerSponge(d, x + d, y - d, z - d, color, scene, depth);
+            mengerSponge(d, x - d, y - d, z - d, color, scene, depth - 1);
+            mengerSponge(d, x, y - d, z - d, color, scene, depth - 1);
+            mengerSponge(d, x + d, y - d, z - d, color, scene, depth - 1);
 
             // sides
-            mengerSponge(d, x - d, y, z + d, color, scene, depth);
-            mengerSponge(d, x + d, y, z + d, color, scene, depth);
+            mengerSponge(d, x - d, y, z + d, color, scene, depth - 1);
+            mengerSponge(d, x + d, y, z + d, color, scene, depth - 1);
             
-            mengerSponge(d, x - d, y, z - d, color, scene, depth);
-            mengerSponge(d, x + d, y, z - d, color, scene, depth);
+            mengerSponge(d, x - d, y, z - d, color, scene, depth - 1);
+            mengerSponge(d, x + d, y, z - d, color, scene, depth - 1);
 
             // top
-            mengerSponge(d, x - d, y + d, z + d, color, scene, depth);
-            mengerSponge(d, x, y + d, z + d, color, scene, depth);
-            mengerSponge(d, x + d, y + d, z + d, color, scene, depth);
+            mengerSponge(d, x - d, y + d, z + d, color, scene, depth - 1);
+            mengerSponge(d, x, y + d, z + d, color, scene, depth - 1);
+            mengerSponge(d, x + d, y + d, z + d, color, scene, depth - 1);
 
-            mengerSponge(d, x - d, y + d, z, color, scene, depth);
-            mengerSponge(d, x + d, y + d, z, color, scene, depth);
+            mengerSponge(d, x - d, y + d, z, color, scene, depth - 1);
+            mengerSponge(d, x + d, y + d, z, color, scene, depth - 1);
             
-            mengerSponge(d, x - d, y + d, z - d, color, scene, depth);
-            mengerSponge(d, x, y + d, z - d, color, scene, depth);
-            mengerSponge(d, x + d, y + d, z - d, color, scene, depth);
+            mengerSponge(d, x - d, y + d, z - d, color, scene, depth - 1);
+            mengerSponge(d, x, y + d, z - d, color, scene, depth - 1);
+            mengerSponge(d, x + d, y + d, z - d, color, scene, depth - 1);
 
             return;
         }
@@ -157,7 +156,7 @@
 			var scene = new THREE.Scene();
 
             // createRubiksCube(2, scene);
-			mengerSponge(10, 0, 0, 0, 0xffffff, scene, 2);
+			mengerSponge(10, 0, 0, 0, 0xffffff, scene, 3);
 
             const light = new THREE.PointLight(0xffffff, 3, 100);
             light.position.set(25, 50, 50);
