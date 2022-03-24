@@ -98,8 +98,10 @@
             cube.position.z = z;
             scene.add(cube);
 
-            // The cube wireframe
-            var edgesMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true });
+            // The wireframe material
+            var edgesMaterial = new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true});
+
+            // The wireframe object
             var cubeWireframe = new THREE.Mesh(geometry, edgesMaterial);
             cubeWireframe.position.x = x;
             cubeWireframe.position.y = y;
