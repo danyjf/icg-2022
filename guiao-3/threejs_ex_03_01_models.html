@@ -125,7 +125,19 @@
 			document.body.appendChild(renderer.domElement);
 
 			// Render the scene
-			renderer.render(scene, camera);
+			// renderer.render(scene, camera);
+
+            var step = 0;
+            renderScene();
+
+            function renderScene() { 
+                requestAnimationFrame(renderScene);             
+
+                step += 0.04;
+                tree_1.position.x = -50 + (30 * Math.abs(Math.cos(step)));
+
+                renderer.render(scene, camera); 
+            }
 		}
 
 		window.onload = init
