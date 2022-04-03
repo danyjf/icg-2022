@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <!--
-
 		threejs_ex_03_01_models.html
 
 		J. Madeira - March 2021
-
 -->
 <head>
 	<title>three.js example 01 &mdash; Some Models</title>
@@ -65,15 +63,25 @@
 			return tree;
 		}
 
+        function createForest(x, y, z, scene) {
+            const forest = new THREE.Object3D();
+            scene.add(forest);
+
+            forest.position.set(x, y, z);
+
+            forest.add(createTree(-10, 0, -10, 0.5, 0.5, 0.5));
+            forest.add(createTree(10, 0, -10, 0.5, 0.5, 0.5));
+            forest.add(createTree(0, 0, 10, 0.5, 0.5, 0.5));
+
+            return forest;
+        }
+
 		// Once everything is loaded, run this function
 		function init() {
 			// The SCENE
 			var scene = new THREE.Scene();
 
-			// Plane Helper to represent the ZOX plane
-			// const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0));
-			// const planeHelper = new THREE.PlaneHelper(plane, 200, 0xaaaaaa);
-			// scene.add(planeHelper);
+			// The PLANE
             var planeGeometry = new THREE.PlaneGeometry(200, 200);
 			var planeMaterial = new THREE.MeshPhongMaterial({ color: 0x666600 });
 			var plane = new THREE.Mesh(planeGeometry, planeMaterial);
@@ -85,18 +93,27 @@
 			var axes = new THREE.AxesHelper(15);
 			scene.add(axes);
 
-			// Adding models to the scene
-			var tree_1 = createTree(-50, 0, -25, 1, 1, 1);
-            scene.add(tree_1);
+            // The OBJECTS
+            var objects = [];
 
-            var tree_2 = createTree(-50, 0, 25, 1.5, 1, 1.5);
-			scene.add(tree_2);
+            forest1 = createForest(-70, 0, 0, scene);
+            forest2 = createForest(0, 0, 70, scene);
+            forest3 = createForest(70, 0, 0, scene);
+            forest4 = createForest(0, 0, -70, scene);
 
-            var tree_3 = createTree(50, 0, -25, 1, 2, 1);
-			scene.add(tree_3);
+            var orbit = new THREE.Object3D();
+            scene.add(orbit);
 
-            var tree_4 = createTree(50, 0, 25, 1, 0.75, 1);
-			scene.add(tree_4);
+            orbit.add(forest1);
+            orbit.add(forest2);
+            orbit.add(forest3);
+            orbit.add(forest4);
+
+            objects.push(forest1);
+            objects.push(forest2);
+            objects.push(forest3);
+            objects.push(forest4);
+            objects.push(orbit);
 
             // The LIGHT
             const light = new THREE.PointLight(0xffffff, 2, 250);
@@ -124,21 +141,14 @@
 			// Add the output of the renderer
 			document.body.appendChild(renderer.domElement);
 
-			// Render the scene
-			// renderer.render(scene, camera);
-
-            var step = 0;
             renderScene();
 
             function renderScene() { 
                 requestAnimationFrame(renderScene);             
 
-                step += 0.04;
-
-                tree_1.position.x = -50 + (30 * Math.abs(Math.cos(step)));
-                tree_2.position.z = 25 + (20 * Math.cos(step));
-                tree_3.position.z = -25 + (20 * Math.abs(Math.cos(step)));
-                tree_4.position.x = 50 + (35 * Math.cos(step * 1.5));
+                objects.forEach((obj) => {
+                    obj.rotation.y += 0.025;
+                });
 
                 renderer.render(scene, camera); 
             }
