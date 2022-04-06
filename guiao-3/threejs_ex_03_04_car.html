@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+		threejs_ex_03_01_models.html
+
+		J. Madeira - March 2021
+-->
+<head>
+	<title>three.js example 01 &mdash; Some Models</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<style>
+		body {
+			background-color: #ffffff;
+			/* To use the complete page */
+			margin: 0px;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<!-- The library --- Can be a local version -->
+	<script type="text/javascript" src="http://threejs.org/build/three.js"></script>
+
+	<!-- Javascript code that runs the Three.js example -->
+	<script type="text/javascript">
+        function createCarWheel(posX, posY, posZ) {
+            var carWheelGeometry = new THREE.CylinderGeometry(3, 3, 2, 6);
+            var carWheelMaterial = new THREE.MeshPhongMaterial({color: 0x666666});
+            var carWheel = new THREE.Mesh(carWheelGeometry, carWheelMaterial);
+            
+            carWheel.rotation.x = Math.PI / 2;
+            carWheel.position.set(posX, posY, posZ);
+
+            carWheel.castShadow = true;
+            carWheel.receiveShadow = true;
+            
+            return carWheel;
+        }
+
+		// Once everything is loaded, run this function
+		function init() {
+			// The SCENE
+			var scene = new THREE.Scene();
+
+			// The PLANE
+            var planeGeometry = new THREE.PlaneGeometry(200, 200);
+			var planeMaterial = new THREE.MeshPhongMaterial({ color: 0x666600 });
+			var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+            plane.rotation.x = -0.5 * Math.PI;
+            plane.receiveShadow = true;
+            scene.add(plane)
+
+			// The coordinate axes
+			var axes = new THREE.AxesHelper(15);
+			scene.add(axes);
+
+            // The OBJECTS
+            var orbit = new THREE.Object3D();
+            scene.add(orbit);
+
+            var car = new THREE.Object3D();
+            car.position.y = 7;
+            car.position.z = -40;
+            orbit.add(car);
+            
+            var carBodyGeometry = new THREE.BoxGeometry(30, 10, 15);
+            var carBodyMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+            var carBody = new THREE.Mesh(carBodyGeometry, carBodyMaterial);
+            carBody.castShadow = true;
+            carBody.receiveShadow = true;
+            car.add(carBody);
+
+            var carWheels = new THREE.Object3D();
+            car.add(carWheels);
+
+            carWheels.add(createCarWheel(-9, -4, 7));
+            carWheels.add(createCarWheel(9, -4, 7));
+            carWheels.add(createCarWheel(-9, -4, -7));
+            carWheels.add(createCarWheel(9, -4, -7));
+
+            // The LIGHT
+            const light = new THREE.PointLight(0xffffff, 2, 250);
+            light.position.set(25, 75, 50);
+            light.castShadow = true;
+            scene.add(light);
+
+			// The CAMERA --- A camera is added to the scene
+			// --- Where the viewer is and how he is looking at the scene
+			var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 400);
+			camera.position.y = 50;
+			camera.position.z = 150;
+
+			// Point the camera to the center of the scene
+			camera.lookAt(scene.position);
+			scene.add(camera)
+
+			// The RENDERER --- To display the scene on the Web page
+			var renderer = new THREE.WebGLRenderer({ antialias: true });
+			renderer.setClearColor(new THREE.Color(0xffffff));
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+
+			// Add the output of the renderer
+			document.body.appendChild(renderer.domElement);
+
+            renderScene();
+
+            function renderScene() { 
+                requestAnimationFrame(renderScene);             
+
+                orbit.rotation.y += 0.01;
+
+                carWheels.children.forEach(wheel => {
+                    wheel.rotation.y += 0.05;
+                });
+
+                renderer.render(scene, camera); 
+            }
+		}
+
+		window.onload = init
+	</script>
+</body>
+</html>
