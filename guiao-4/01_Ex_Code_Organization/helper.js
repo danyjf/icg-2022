@@ -49,6 +49,15 @@ const helper = {
         spotLight.shadow.mapSize.width = 2048;
         spotLight.shadow.mapSize.height = 2048;
 
+        const spotLight2 = new THREE.SpotLight('rgb(255, 255, 255)', 0.8);
+        spotLight2.position.set(5, 8, 5);
+        sceneElements.sceneGraph.add(spotLight2);
+
+        // Setup shadow properties for the spotlight
+        spotLight2.castShadow = true;
+        spotLight2.shadow.mapSize.width = 2048;
+        spotLight2.shadow.mapSize.height = 2048;
+
 
         // *********************************** //
         // Create renderer (with shadow map)

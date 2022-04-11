@@ -32,7 +32,7 @@ requestAnimationFrame(computeFrame);
 window.addEventListener('resize', resizeWindow);
 
 //To keep track of the keyboard - WASD
-var keyD = false, keyA = false, keyS = false, keyW = false;
+var keyD = false, keyA = false, keyS = false, keyW = false, keyPlus = false, keyMinus = false;
 document.addEventListener('keydown', onDocumentKeyDown, false);
 document.addEventListener('keyup', onDocumentKeyUp, false);
 
@@ -61,6 +61,12 @@ function onDocumentKeyDown(event) {
         case 87: //w
             keyW = true;
             break;
+        case 171: // +
+            keyPlus = true;
+            break;
+        case 173: // -
+            keyMinus = true;
+            break;
     }
 }
 function onDocumentKeyUp(event) {
@@ -76,6 +82,12 @@ function onDocumentKeyUp(event) {
             break;
         case 87: //w
             keyW = false;
+            break;
+        case 171: // +
+            keyPlus = false;
+            break;
+        case 173: // -
+            keyMinus = false;
             break;
     }
 }
@@ -137,6 +149,9 @@ function load3DObjects(sceneGraph) {
     // Set shadow property
     sphereObject.castShadow = true;
 
+    // Name
+    sphereObject.name = "sphere";
+
 
     // ************************** //
     // Create a cylinder
@@ -160,6 +175,8 @@ function load3DObjects(sceneGraph) {
 var delta = 0.1;
 
 var dispX = 0.2, dispZ = 0.2;
+
+var scaleDelta = 0.05;
 
 function computeFrame(time) {
 
@@ -193,6 +210,23 @@ function computeFrame(time) {
     if (keyS && cube.position.z < 2.5) {
         cube.translateZ(dispZ);
     }
+
+    // CONTROLING THE SIZE OF THE SPHERE WITH THE KEYBOARD
+
+    const sphere = sceneElements.sceneGraph.getObjectByName("sphere");
+
+    if(keyPlus) {
+        sphere.scale.x += scaleDelta;
+        sphere.scale.y += scaleDelta;
+        sphere.scale.z += scaleDelta;
+    }
+    if(keyMinus) {
+        sphere.scale.x -= scaleDelta;
+        sphere.scale.y -= scaleDelta;
+        sphere.scale.z -= scaleDelta;
+    }
+
+    sphere.position.y = 0.5 * sphere.scale.y;
 
     // Rendering
     helper.render(sceneElements);
