@@ -1,3 +1,5 @@
+-> Inspiration: https://threejs.org/examples/#webgl_instancing_scatter
+
 -> Donut shape with growing and dying forests, mouse click to orbit around.
 
 -> Donut shape with growing and dying forests, mouse click to orbit around, wasd to move light affecting growth of forest.
