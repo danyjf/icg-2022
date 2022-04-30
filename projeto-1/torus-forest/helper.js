@@ -14,7 +14,7 @@ const helper = {
         const height = window.innerHeight;
         const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 500);
         sceneElements.camera = camera;
-        camera.position.set(0, 8, 8);
+        camera.position.set(0, 40, 40);
         camera.lookAt(0, 0, 0);
 
         // ************************** //
@@ -31,13 +31,17 @@ const helper = {
         // Add spotlight (with shadows)
         // ***************************** //
         const spotLight = new THREE.SpotLight('rgb(255, 255, 255)', 0.8);
-        spotLight.position.set(-5, 8, 0);
+        spotLight.position.set(0, 0, 0);
+        spotLight.angle = Math.PI / 6
+        spotLight.penumbra = 0.5;
         sceneElements.sceneGraph.add(spotLight);
 
         // Setup shadow properties for the spotlight
         spotLight.castShadow = true;
         spotLight.shadow.mapSize.width = 2048;
         spotLight.shadow.mapSize.height = 2048;
+
+        spotLight.name = "light";
 
         // *********************************** //
         // Create renderer (with shadow map)

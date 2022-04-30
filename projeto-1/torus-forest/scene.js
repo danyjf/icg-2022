@@ -133,19 +133,41 @@ function createTree(posX, posY, posZ, rotX, rotY, rotZ) {
 // Create and insert in the scene graph the models of the 3D scene
 function load3DObjects(sceneGraph) {
     // Create torus
-    const torusGeometry = new THREE.TorusGeometry(12, 4, 16, 100);
+    const torusGeometry = new THREE.TorusGeometry(20, 8, 32, 100);
     const torusMaterial = new THREE.MeshPhongMaterial({color: 0xbbff00});
     const torusObject = new THREE.Mesh(torusGeometry, torusMaterial);
     torusObject.rotation.x = Math.PI / 2;
     sceneGraph.add(torusObject);
 
+    // Create torus wireframe
     const torusWireframeMaterial = new THREE.MeshBasicMaterial({color: 0x000000, wireframe: true});
     const torusWireframeObject = new THREE.Mesh(torusGeometry, torusWireframeMaterial);
     torusWireframeObject.rotation.x = torusObject.rotation.x;
     sceneGraph.add(torusWireframeObject);
 
+    // Torus center
+    const torusCenter = new THREE.Group();
+    sceneGraph.add(torusCenter);
+
+    // Create orbit
+    const orbit = new THREE.Group();
+    torusCenter.add(orbit);
+    orbit.position.set(20, 0, 0);
+
+    // Create spotlight object
+    const light = sceneGraph.getObjectByName("light");
+    const spotlightGeometry = new THREE.CylinderGeometry(0.2, 0.6, 0.4, 32);
+    const spotlightMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+    const spotlight = new THREE.Mesh(spotlightGeometry, spotlightMaterial);
+    spotlight.position.set(0, 15, 0);
+    light.target = orbit;
+    spotlight.add(light)
+    orbit.add(spotlight);
+
     // Create flower
     sceneGraph.add(createFlower(0, 0, 0, 0, 0, 0));
+
+    torusCenter.rotation.y = Math.PI;
 }
 
 function computeFrame(time) {
