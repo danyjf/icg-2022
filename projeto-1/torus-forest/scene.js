@@ -69,11 +69,72 @@ function onDocumentKeyUp(event) {
     }
 }
 
+function createFlower(posX, posY, posZ, rotX, rotY, rotZ) {
+    // Create stem
+    const stemGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 6);
+    const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+    const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+
+    // Create seeds
+    const seedsGeometry = new THREE.SphereGeometry(0.1, 8, 4);
+    const seedsMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+    const seeds = new THREE.Mesh(seedsGeometry, seedsMaterial);
+    seeds.position.set(0, 0.4, 0);
+
+    // Create petals
+    const petals = new THREE.Group();
+    const petalGeometry = new THREE.PlaneGeometry(0.5, 0.5);
+    const material = new THREE.MeshBasicMaterial({color: 0x0000ff, side: THREE.DoubleSide});
+    
+    var petal = new THREE.Mesh(petalGeometry, material);
+    petal.position.set(-0.25, 0, 0);
+    petal.rotation.x = -Math.PI / 2;
+    petals.add(petal);
+
+    petal = new THREE.Mesh(petalGeometry, material);
+    petal.position.set(0, 0, 0.25);
+    petal.rotation.x = -Math.PI / 2;
+    petals.add(petal);
+
+    petal = new THREE.Mesh(petalGeometry, material);
+    petal.position.set(0.25, 0, 0);
+    petal.rotation.x = -Math.PI / 2;
+    petals.add(petal);
+
+    petal = new THREE.Mesh(petalGeometry, material);
+    petal.position.set(0, 0, -0.25);
+    petal.rotation.x = -Math.PI / 2;
+    petals.add(petal);
+    
+    petals.position.set(0, 0.4, 0);
+
+    // Create flower
+    var flower = new THREE.Group();
+    flower.add(stem);
+    flower.add(seeds);
+    flower.add(petals);
+
+    flower.position.set(posX, posY, posZ);
+    flower.rotation.x = rotX;
+    flower.rotation.y = rotY;
+    flower.rotation.z = rotZ;
+
+    return flower;
+}
+
+function createGrass(posX, posY, posZ, rotX, rotY, rotZ) {
+
+}
+
+function createTree(posX, posY, posZ, rotX, rotY, rotZ) {
+
+}
+
 // Create and insert in the scene graph the models of the 3D scene
 function load3DObjects(sceneGraph) {
     // Create torus
     const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
-    const torusMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+    const torusMaterial = new THREE.MeshPhongMaterial({color: 0xbbff00});
     const torusObject = new THREE.Mesh(torusGeometry, torusMaterial);
     torusObject.rotation.x = Math.PI / 2;
     sceneGraph.add(torusObject);
@@ -82,6 +143,9 @@ function load3DObjects(sceneGraph) {
     const torusWireframeObject = new THREE.Mesh(torusGeometry, torusWireframeMaterial);
     torusWireframeObject.rotation.x = torusObject.rotation.x;
     sceneGraph.add(torusWireframeObject);
+
+    // Create flower
+    sceneGraph.add(createFlower(0, 0, 0, 0, 0, 0));
 }
 
 function computeFrame(time) {
