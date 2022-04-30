@@ -1,14 +1,11 @@
 "use strict";
 
 const helper = {
-
     initEmptyScene: function (sceneElements) {
-
         // ************************** //
         // Create the 3D scene
         // ************************** //
         sceneElements.sceneGraph = new THREE.Scene();
-
 
         // ************************** //
         // Add camera
@@ -19,7 +16,6 @@ const helper = {
         sceneElements.camera = camera;
         camera.position.set(0, 30, 50);
         camera.lookAt(0, 0, 0);
-
 
         // ************************** //
         // Illumination
@@ -56,12 +52,17 @@ const helper = {
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-
         // **************************************** //
         // Add the rendered image in the HTML DOM
         // **************************************** //
         const htmlElement = document.querySelector("#tagTorusForest");
         htmlElement.appendChild(renderer.domElement);
+
+        // ************************** //
+        // Control for the camera
+        // ************************** //
+        sceneElements.control = new THREE.OrbitControls(camera, renderer.domElement);
+        sceneElements.control.screenSpacePanning = true;
     },
 
     render: function render(sceneElements) {

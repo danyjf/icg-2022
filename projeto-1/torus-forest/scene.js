@@ -4,9 +4,9 @@
 const sceneElements = {
     sceneGraph: null,
     camera: null,
+    control: null,
     renderer: null,
 };
-
 
 // Functions are called
 //  1. Initialize the empty scene
@@ -18,7 +18,6 @@ requestAnimationFrame(computeFrame);
 
 // HANDLING EVENTS
 // Event Listeners
-
 window.addEventListener('resize', resizeWindow);
 
 //To keep track of the keyboard - WASD
@@ -88,6 +87,9 @@ function load3DObjects(sceneGraph) {
 function computeFrame(time) {
     // Rendering
     helper.render(sceneElements);
+
+    // Update control of the camera
+    sceneElements.control.update();
 
     // Call for the next frame
     requestAnimationFrame(computeFrame);
