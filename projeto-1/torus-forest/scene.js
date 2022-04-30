@@ -52,6 +52,7 @@ function onDocumentKeyDown(event) {
             break;
     }
 }
+
 function onDocumentKeyUp(event) {
     switch (event.keyCode) {
         case 68: //d
@@ -151,7 +152,9 @@ function load3DObjects(sceneGraph) {
 
     // Create orbit
     const orbit = new THREE.Group();
+    orbit.name = "orbit";
     torusCenter.add(orbit);
+    torusCenter.name = "torusCenter";
     orbit.position.set(20, 0, 0);
 
     // Create spotlight object
@@ -171,6 +174,22 @@ function load3DObjects(sceneGraph) {
 }
 
 function computeFrame(time) {
+    const torusCenter = sceneElements.sceneGraph.getObjectByName("torusCenter");
+    const orbit = sceneElements.sceneGraph.getObjectByName("orbit");
+
+    if(keyA) {
+        torusCenter.rotation.y -= 0.02;
+    }
+    if(keyD) {
+        torusCenter.rotation.y += 0.02;
+    }
+    if(keyW) {
+        orbit.rotation.z -= 0.02;
+    }
+    if(keyS) {
+        orbit.rotation.z += 0.02;
+    }
+
     // Rendering
     helper.render(sceneElements);
 
