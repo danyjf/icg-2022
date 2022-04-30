@@ -133,7 +133,7 @@ function createTree(posX, posY, posZ, rotX, rotY, rotZ) {
 // Create and insert in the scene graph the models of the 3D scene
 function load3DObjects(sceneGraph) {
     // Create torus
-    const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+    const torusGeometry = new THREE.TorusGeometry(12, 4, 16, 100);
     const torusMaterial = new THREE.MeshPhongMaterial({color: 0xbbff00});
     const torusObject = new THREE.Mesh(torusGeometry, torusMaterial);
     torusObject.rotation.x = Math.PI / 2;
