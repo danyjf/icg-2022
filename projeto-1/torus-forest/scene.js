@@ -138,6 +138,7 @@ function load3DObjects(sceneGraph) {
     const torusMaterial = new THREE.MeshPhongMaterial({color: 0xbbff00});
     const torusObject = new THREE.Mesh(torusGeometry, torusMaterial);
     torusObject.rotation.x = Math.PI / 2;
+    torusObject.name = "torus";
     sceneGraph.add(torusObject);
 
     // Create torus wireframe
@@ -164,8 +165,9 @@ function load3DObjects(sceneGraph) {
     const spotlight = new THREE.Mesh(spotlightGeometry, spotlightMaterial);
     spotlight.position.set(0, 15, 0);
     light.target = orbit;
-    spotlight.add(light)
+    spotlight.add(light);
     orbit.add(spotlight);
+    spotlight.name = "spotlight";
 
     // Create flower
     sceneGraph.add(createFlower(0, 0, 0, 0, 0, 0));
@@ -176,18 +178,28 @@ function load3DObjects(sceneGraph) {
 function computeFrame(time) {
     const torusCenter = sceneElements.sceneGraph.getObjectByName("torusCenter");
     const orbit = sceneElements.sceneGraph.getObjectByName("orbit");
+    const spotlight = sceneElements.sceneGraph.getObjectByName("spotlight");
+    const spotlightPosition = new THREE.Vector3();
+    const torus = sceneElements.sceneGraph.getObjectByName("torus");
+    
+    spotlight.getWorldPosition(spotlightPosition);
+    const raycaster = new THREE.Raycaster(spotlightPosition, new THREE.Vector3(0, -1, 0), 0, 15);
+    const intersects = raycaster.intersectObject(torus);
 
+    console.log(intersects);
+
+    // Using the remainder of 2PI makes it so the rotation value doesn't get infinitely big or small
     if(keyA) {
-        torusCenter.rotation.y -= 0.02;
+        torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
     }
     if(keyD) {
-        torusCenter.rotation.y += 0.02;
+        torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
     }
     if(keyW) {
-        orbit.rotation.z -= 0.02;
+        orbit.rotation.z = (orbit.rotation.z - 0.02) % (2 * Math.PI);
     }
     if(keyS) {
-        orbit.rotation.z += 0.02;
+        orbit.rotation.z = (orbit.rotation.z + 0.02) % (2 * Math.PI);
     }
 
     // Rendering
