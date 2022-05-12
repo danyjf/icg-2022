@@ -29,6 +29,10 @@ const scene = {
         
         // Create flower
         const flower = objects.createFlower(0, 0, 0, 0, 0, 0);
+        flower.name = "flower";
+
+        const test = objects.createFlower(0, 0, 0, 0, 0, 0);
+        test.name = "test";
         
         sceneGraph.add(spotLight);
         sceneGraph.add(torus);
@@ -37,34 +41,31 @@ const scene = {
         lamp.add(spotLight);
         torusTubeCenter.add(lamp);
         sceneGraph.add(flower);
+        sceneGraph.add(test);
     },
 
     // Function called every frame
     update: function update(time) {
         const torusCenter = sceneElements.sceneGraph.getObjectByName("torusCenter");
         const torusTubeCenter = sceneElements.sceneGraph.getObjectByName("torusTubeCenter");
+        const torusTubeCenterPosition = new THREE.Vector3();
+        torusTubeCenter.getWorldPosition(torusTubeCenterPosition);
         const lamp = sceneElements.sceneGraph.getObjectByName("lamp");
         const lampPosition = new THREE.Vector3();
-        const torus = sceneElements.sceneGraph.getObjectByName("torus");
-        
         lamp.getWorldPosition(lampPosition);
-        const raycaster = new THREE.Raycaster(lampPosition, new THREE.Vector3(0, -1, 0), 0, 15);
-        const intersects = raycaster.intersectObject(torus);
+        const torus = sceneElements.sceneGraph.getObjectByName("torus");
+        const flower = sceneElements.sceneGraph.getObjectByName("flower");
+        const test = sceneElements.sceneGraph.getObjectByName("test");
     
-        // Using the remainder of 2PI makes it so the rotation value doesn't get infinitely big or small
-        if(keys.A) {
-            torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
-        }
-        if(keys.D) {
-            torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
-        }
-        if(keys.W) {
-            torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
-        }
-        if(keys.S) {
-            torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
-        }
-    
+        controls(torusCenter, torusTubeCenter);
+
+        var direction = new THREE.Vector3(
+            torusTubeCenterPosition.x - lampPosition.x, 
+            torusTubeCenterPosition.y - lampPosition.y, 
+            torusTubeCenterPosition.z - lampPosition.z
+        ).normalize();
+        raycast(lampPosition, direction, 0, 15, torus);
+
         // Rendering
         helper.render(sceneElements);
     
@@ -73,5 +74,35 @@ const scene = {
     
         // Call for the next frame
         requestAnimationFrame(update);
+
+        function controls(torusCenter, torusTubeCenter) {
+            // Using the remainder of 2PI makes it so the rotation value doesn't get infinitely big or small
+            if(keys.A) {
+                torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
+            }
+            if(keys.D) {
+                torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
+            }
+            if(keys.W) {
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+            }
+            if(keys.S) {
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+            }
+        }
+
+        function raycast(origin, direction, near, far, intersectObject) {
+            const raycaster = new THREE.Raycaster(origin, direction, near, far);
+            const intersects = raycaster.intersectObject(intersectObject)[0];
+            const flowerDirection = new THREE.Vector3(
+                flower.position.x - torusTubeCenterPosition.x,
+                flower.position.y - torusTubeCenterPosition.y,
+                flower.position.z - torusTubeCenterPosition.z
+            );
+            if(intersects) {
+                flower.position.set(intersects.point.x, intersects.point.y, intersects.point.z);
+                flower.lookAt(flower.position.x + flowerDirection.x, flower.position.y + flowerDirection.y, flower.position.z + flowerDirection.z);
+            }
+        }
     }
 };

@@ -6,12 +6,13 @@ const objects = {
         const stemGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 6);
         const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
         const stem = new THREE.Mesh(stemGeometry, stemMaterial);
-    
+        stem.rotation.x = Math.PI / 2;
+        
         // Create seeds
         const seedsGeometry = new THREE.SphereGeometry(0.1, 8, 4);
         const seedsMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
         const seeds = new THREE.Mesh(seedsGeometry, seedsMaterial);
-        seeds.position.set(0, 0.4, 0);
+        seeds.position.set(0, 0, 0.4);
     
         // Create petals
         const petals = new THREE.Group();
@@ -19,23 +20,19 @@ const objects = {
         const material = new THREE.MeshBasicMaterial({color: 0x0000ff, side: THREE.DoubleSide});
         
         var petal = new THREE.Mesh(petalGeometry, material);
-        petal.position.set(-0.25, 0, 0);
-        petal.rotation.x = -Math.PI / 2;
+        petal.position.set(-0.25, -0.4, 0.4);
         petals.add(petal);
     
         petal = new THREE.Mesh(petalGeometry, material);
-        petal.position.set(0, 0, 0.25);
-        petal.rotation.x = -Math.PI / 2;
+        petal.position.set(0, -0.2, 0.4);
         petals.add(petal);
     
         petal = new THREE.Mesh(petalGeometry, material);
-        petal.position.set(0.25, 0, 0);
-        petal.rotation.x = -Math.PI / 2;
+        petal.position.set(0.25, -0.4, 0.4);
         petals.add(petal);
     
         petal = new THREE.Mesh(petalGeometry, material);
-        petal.position.set(0, 0, -0.25);
-        petal.rotation.x = -Math.PI / 2;
+        petal.position.set(0, -0.6, 0.4);
         petals.add(petal);
         
         petals.position.set(0, 0.4, 0);
