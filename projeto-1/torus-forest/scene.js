@@ -1,25 +1,12 @@
 "use strict";
 
-function raycast(origin, direction, near, far, mesh) {
-    const raycaster = new THREE.Raycaster(origin, direction, near, far);
-    const intersects = raycaster.intersectObject(mesh)[0];
-
-    if(intersects) {
-        let point = intersects.point;
-
-        let normal = intersects.face.normal.clone();
-        normal.transformDirection(mesh.matrixWorld);
-        normal.add(point);
-
-        return {point: point, normal: normal};
-    }
-
-    return null;
-}
-
-let canCastRays = true;
 let allInstancesInfo = [];
-const count = 20;
+const count = 1;
+let sceneObjects = [];
+const raycaster = new THREE.Raycaster();
+raycaster.far = 8;
+let spawnTimer = 0;
+let clock = new THREE.Clock();
 
 const scene = {
     // Function called once at the start
@@ -47,13 +34,6 @@ const scene = {
         lamp.name = "lamp";
         
         spotLight.target = torusTubeCenter;
-        
-        // Create flower
-        const flower = objects.createFlower(0, 0, 0, 0, 0, 0);
-        flower.name = "flower";
-
-        const test = objects.createFlower(0, 0, 0, 0, 0, 0);
-        test.name = "test";
 
         // Add objects to the scene
         sceneGraph.add(spotLight);
@@ -62,8 +42,6 @@ const scene = {
         torusCenter.add(torusTubeCenter);
         lamp.add(spotLight);
         torusTubeCenter.add(lamp);
-        sceneGraph.add(flower);
-        sceneGraph.add(test);
 
         helper.render(sceneElements);
     },
@@ -78,10 +56,10 @@ const scene = {
         const lampPosition = new THREE.Vector3();
         lamp.getWorldPosition(lampPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
-        const flower = sceneElements.sceneGraph.getObjectByName("flower");
-        const test = sceneElements.sceneGraph.getObjectByName("test");
 
-        if(canCastRays) {
+        spawnTimer += clock.getDelta();
+
+        if(spawnTimer > 1) {
             for(let i = 0; i < count; i++) {
                 let direction = getRandomDirection();
                 direction.transformDirection(lamp.matrixWorld);
@@ -97,13 +75,13 @@ const scene = {
                 const normal = allInstancesInfo[i].normal;
 
                 const object = objects.createFlower(point.x, point.y, point.z, 0, 0, 0);
+                sceneObjects.push(object);
                 sceneElements.sceneGraph.add(object);
                 object.lookAt(normal);
             }
 
-            console.log(allInstancesInfo);
-
-            canCastRays = false;
+            allInstancesInfo = [];
+            spawnTimer = 0;
         }
 
         controls(torusCenter, torusTubeCenter);
@@ -151,6 +129,21 @@ const scene = {
             return direction.normalize();
         }
 
+        function raycast(origin, direction, near, far, mesh) {
+            raycaster.set(origin, direction);
+            const intersects = raycaster.intersectObject(mesh)[0];
+        
+            if(intersects) {
+                let normal = intersects.face.normal.clone();
+                normal.transformDirection(mesh.matrixWorld);
+                normal.add(intersects.point);
+        
+                return {point: intersects.point, normal: normal};
+            }
+        
+            return null;
+        }
+
         function controls(torusCenter, torusTubeCenter) {
             // To control the lamp WASD is used to alter the rotation of
             // the center of the torus and of the center of the torus tube,
@@ -160,6 +153,10 @@ const scene = {
 
             if(keys.A) {
                 torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
+                // for(let i = 0; i < sceneObjects.length; i++) {
+                //     sceneElements.sceneGraph.remove(sceneObjects[i]);
+                // }
+                // sceneObjects = [];
             }
             if(keys.D) {
                 torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
