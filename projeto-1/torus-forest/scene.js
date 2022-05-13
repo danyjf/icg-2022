@@ -6,13 +6,10 @@ function raycast(origin, direction, near, far, mesh) {
 
     if(intersects) {
         let point = intersects.point;
-        // flower.position.copy(point);
 
         let normal = intersects.face.normal.clone();
         normal.transformDirection(mesh.matrixWorld);
         normal.add(point);
-
-        // flower.lookAt(normal);
 
         return {point: point, normal: normal};
     }
@@ -120,31 +117,47 @@ const scene = {
         // Call for the next frame
         requestAnimationFrame(update);
 
+        // random float value inside the interval
         function randomFromInterval(min, max) {
             return Math.random() * (max - min) + min;
         }
 
+        // Check if point is inside a circle
         function isInsideCircle(r, x, z) {
             return x * x + z * z < r * r ? true : false;
         }
 
+        // Get random direction for the raycasts from the lamp
         function getRandomDirection() {
-                const r = 0.5;
-                let x = randomFromInterval(-0.5, 0.5);
-                let z = randomFromInterval(-0.5, 0.5);
+            // To get a random direction for the raycast we imagine a circle 
+            // that is under the lamp and pick a random point inside that
+            // circle to point towards it, so the steps are:
+            // 1) Define the radius of the circle
+            // 2) Pick random coordinates inside the circle
+            // 3) Check if the coordinates are inside the circle
+            // 4) When coordinates are found create and return a direction
 
-                while(!isInsideCircle(r, x, z)) {
-                    x = randomFromInterval(-0.5, 0.5);
-                    z = randomFromInterval(-0.5, 0.5);
-                }
+            const r = 0.5;
+            let x = randomFromInterval(-r, r);
+            let z = randomFromInterval(-r, r);
 
-                let direction = new THREE.Vector3(x, -1, z)
+            while(!isInsideCircle(r, x, z)) {
+                x = randomFromInterval(-r, r);
+                z = randomFromInterval(-r, r);
+            }
 
-                return direction.normalize();
+            let direction = new THREE.Vector3(x, -1, z)
+
+            return direction.normalize();
         }
 
         function controls(torusCenter, torusTubeCenter) {
-            // Using the remainder of 2PI makes it so the rotation value doesn't get infinitely big or small
+            // To control the lamp WASD is used to alter the rotation of
+            // the center of the torus and of the center of the torus tube,
+            // to ensure the values of rotation don't grow infinitely big 
+            // or small it's calculated the remainder of 2*PI so that the 
+            // values are always between 0 and 2*PI
+
             if(keys.A) {
                 torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
             }
