@@ -1,5 +1,29 @@
 "use strict";
 
+function raycast(origin, direction, near, far, mesh) {
+    const raycaster = new THREE.Raycaster(origin, direction, near, far);
+    const intersects = raycaster.intersectObject(mesh)[0];
+
+    if(intersects) {
+        let point = intersects.point;
+        // flower.position.copy(point);
+
+        let normal = intersects.face.normal.clone();
+        normal.transformDirection(mesh.matrixWorld);
+        normal.add(point);
+
+        // flower.lookAt(normal);
+
+        return {point: point, normal: normal};
+    }
+
+    return null;
+}
+
+let canCastRays = true;
+let allInstancesInfo = [];
+const count = 20;
+
 const scene = {
     // Function called once at the start
     start: function start(sceneGraph) {
@@ -33,7 +57,8 @@ const scene = {
 
         const test = objects.createFlower(0, 0, 0, 0, 0, 0);
         test.name = "test";
-        
+
+        // Add objects to the scene
         sceneGraph.add(spotLight);
         sceneGraph.add(torus);
         sceneGraph.add(torusCenter);
@@ -42,6 +67,8 @@ const scene = {
         torusTubeCenter.add(lamp);
         sceneGraph.add(flower);
         sceneGraph.add(test);
+
+        helper.render(sceneElements);
     },
 
     // Function called every frame
@@ -56,16 +83,33 @@ const scene = {
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
         const flower = sceneElements.sceneGraph.getObjectByName("flower");
         const test = sceneElements.sceneGraph.getObjectByName("test");
-    
-        controls(torusCenter, torusTubeCenter);
 
-        var direction = new THREE.Vector3(
-            torusTubeCenterPosition.x - lampPosition.x, 
-            torusTubeCenterPosition.y - lampPosition.y, 
-            torusTubeCenterPosition.z - lampPosition.z
-        ).normalize();
-        direction.applyAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 6);
-        raycast(lampPosition, direction, 0, 15, torus);
+        if(canCastRays) {
+            for(let i = 0; i < count; i++) {
+                let direction = getRandomDirection();
+                direction.transformDirection(lamp.matrixWorld);
+
+                const instanceInfo = raycast(lampPosition, direction, 0, 9, torus);
+                if(instanceInfo) {
+                    allInstancesInfo.push(instanceInfo);
+                }
+            }
+
+            for(let i = 0; i < allInstancesInfo.length; i++) {
+                const point = allInstancesInfo[i].point;
+                const normal = allInstancesInfo[i].normal;
+
+                const object = objects.createFlower(point.x, point.y, point.z, 0, 0, 0);
+                sceneElements.sceneGraph.add(object);
+                object.lookAt(normal);
+            }
+
+            console.log(allInstancesInfo);
+
+            canCastRays = false;
+        }
+
+        controls(torusCenter, torusTubeCenter);
 
         // Rendering
         helper.render(sceneElements);
@@ -75,6 +119,29 @@ const scene = {
     
         // Call for the next frame
         requestAnimationFrame(update);
+
+        function randomFromInterval(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function isInsideCircle(r, x, z) {
+            return x * x + z * z < r * r ? true : false;
+        }
+
+        function getRandomDirection() {
+                const r = 0.5;
+                let x = randomFromInterval(-0.5, 0.5);
+                let z = randomFromInterval(-0.5, 0.5);
+
+                while(!isInsideCircle(r, x, z)) {
+                    x = randomFromInterval(-0.5, 0.5);
+                    z = randomFromInterval(-0.5, 0.5);
+                }
+
+                let direction = new THREE.Vector3(x, -1, z)
+
+                return direction.normalize();
+        }
 
         function controls(torusCenter, torusTubeCenter) {
             // Using the remainder of 2PI makes it so the rotation value doesn't get infinitely big or small
@@ -89,23 +156,6 @@ const scene = {
             }
             if(keys.S) {
                 torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
-            }
-        }
-
-        function raycast(origin, direction, near, far, mesh) {
-            const raycaster = new THREE.Raycaster(origin, direction, near, far);
-            const intersects = raycaster.intersectObject(mesh)[0];
-
-            if(intersects) {
-                let point = intersects.point;
-                flower.position.copy(point);
-
-                let normal = intersects.face.normal.clone();
-                normal.transformDirection(mesh.matrixWorld);
-                normal.add(point);
-                console.log(normal);
-
-                flower.lookAt(normal);
             }
         }
     }
