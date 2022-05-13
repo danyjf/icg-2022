@@ -64,6 +64,7 @@ const scene = {
             torusTubeCenterPosition.y - lampPosition.y, 
             torusTubeCenterPosition.z - lampPosition.z
         ).normalize();
+        direction.applyAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 6);
         raycast(lampPosition, direction, 0, 15, torus);
 
         // Rendering
@@ -91,17 +92,20 @@ const scene = {
             }
         }
 
-        function raycast(origin, direction, near, far, intersectObject) {
+        function raycast(origin, direction, near, far, mesh) {
             const raycaster = new THREE.Raycaster(origin, direction, near, far);
-            const intersects = raycaster.intersectObject(intersectObject)[0];
-            const flowerDirection = new THREE.Vector3(
-                flower.position.x - torusTubeCenterPosition.x,
-                flower.position.y - torusTubeCenterPosition.y,
-                flower.position.z - torusTubeCenterPosition.z
-            );
+            const intersects = raycaster.intersectObject(mesh)[0];
+
             if(intersects) {
-                flower.position.set(intersects.point.x, intersects.point.y, intersects.point.z);
-                flower.lookAt(flower.position.x + flowerDirection.x, flower.position.y + flowerDirection.y, flower.position.z + flowerDirection.z);
+                let point = intersects.point;
+                flower.position.copy(point);
+
+                let normal = intersects.face.normal.clone();
+                normal.transformDirection(mesh.matrixWorld);
+                normal.add(point);
+                console.log(normal);
+
+                flower.lookAt(normal);
             }
         }
     }
