@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 const objects = {
-    createFlower: function createFlower(posX, posY, posZ, rotX, rotY, rotZ) {
+    createFlower: function createFlower(posX, posY, posZ) {
         // Create stem
         const stemGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 6);
         const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
@@ -44,18 +44,16 @@ const objects = {
         flower.add(petals);
     
         flower.position.set(posX, posY, posZ);
-        flower.rotation.x = rotX;
-        flower.rotation.y = rotY;
-        flower.rotation.z = rotZ;
+        flower.scale.set(0.0001, 0.0001, 0.0001);
     
-        return flower;
+        return {object3D: flower, isGrowing: true, isDying: false};
     },
 
-    createTree: function createTree(posX, posY, posZ, rotX, rotY, rotZ) {
+    createTree: function createTree(posX, posY, posZ) {
 
     },
 
-    createGrass: function createGrass(posX, posY, posZ, rotX, rotY, rotZ) {
+    createGrass: function createGrass(posX, posY, posZ) {
 
     },
 

@@ -4,7 +4,7 @@ let allInstancesInfo = [];
 const count = 1;
 let sceneObjects = [];
 const raycaster = new THREE.Raycaster();
-raycaster.far = 8;
+raycaster.far = 9;
 let spawnTimer = 0;
 let clock = new THREE.Clock();
 
@@ -57,6 +57,8 @@ const scene = {
         lamp.getWorldPosition(lampPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
 
+        controls(torusCenter, torusTubeCenter);
+        
         spawnTimer += clock.getDelta();
 
         if(spawnTimer > 1) {
@@ -64,7 +66,7 @@ const scene = {
                 let direction = getRandomDirection();
                 direction.transformDirection(lamp.matrixWorld);
 
-                const instanceInfo = raycast(lampPosition, direction, 0, 9, torus);
+                const instanceInfo = raycast(lampPosition, direction, torus);
                 if(instanceInfo) {
                     allInstancesInfo.push(instanceInfo);
                 }
@@ -74,26 +76,87 @@ const scene = {
                 const point = allInstancesInfo[i].point;
                 const normal = allInstancesInfo[i].normal;
 
-                const object = objects.createFlower(point.x, point.y, point.z, 0, 0, 0);
+                const object = objects.createFlower(point.x, point.y, point.z);
                 sceneObjects.push(object);
-                sceneElements.sceneGraph.add(object);
-                object.lookAt(normal);
+                sceneElements.sceneGraph.add(object.object3D);
+                object.object3D.lookAt(normal);
             }
 
             allInstancesInfo = [];
             spawnTimer = 0;
         }
 
-        controls(torusCenter, torusTubeCenter);
+        for(let i = 0; i < sceneObjects.length; i++) {
+            // TODO: Check if the object is still under the light
+            // if the object is not then set it to dying
+            if(!isUnderLight(sceneObjects[i].object3D, lamp)) {
+                sceneObjects[i].isDying = true;
+                sceneObjects[i].isGrowing = false;
+            } else {
+                sceneObjects[i].isDying = false;
+                sceneObjects[i].isGrowing = true;
+            }
+
+            if(sceneObjects[i].object3D.scale.x >= 1) {
+                sceneObjects[i].isGrowing = false;
+            }
+
+            if(sceneObjects[i].object3D.scale.x < 0) {
+                sceneElements.sceneGraph.remove(sceneObjects[i].object3D);
+            }
+            
+            if(sceneObjects[i].isGrowing) {
+                sceneObjects[i].object3D.scale.x += 0.005;
+                sceneObjects[i].object3D.scale.y += 0.005;
+                sceneObjects[i].object3D.scale.z += 0.005;
+            }
+
+            if(sceneObjects[i].isDying) {
+                sceneObjects[i].object3D.scale.x -= 0.005;
+                sceneObjects[i].object3D.scale.y -= 0.005;
+                sceneObjects[i].object3D.scale.z -= 0.005;
+            }
+        }
 
         // Rendering
         helper.render(sceneElements);
-    
         // Update control of the camera
         sceneElements.control.update();
-    
         // Call for the next frame
         requestAnimationFrame(update);
+
+        function isUnderLight(object, lightSource) {
+            let objectPos = object.position.clone();
+            lightSource.worldToLocal(objectPos);
+
+            let direction = objectPos.normalize();
+
+            /** 
+             * Plane equation:
+             * x = x
+             * y = -1
+             * z = z
+             * 
+             * Line equation:
+             * x = ta
+             * y = tb
+             * z = tc
+             * 
+             * x = ta
+             * -1 = tb
+             * z = tc
+             * 
+             * x = ta
+             * t = -1/b
+             * z = tc
+            */
+
+            const t = -1 / direction.y;
+            const x = t * direction.x;
+            const z = t * direction.z;
+
+            return isInsideCircle(0.5, x, z);
+        }
 
         // random float value inside the interval
         function randomFromInterval(min, max) {
@@ -105,6 +168,7 @@ const scene = {
             return x * x + z * z < r * r ? true : false;
         }
 
+        // TODO: Change this to use polar coordinates
         // Get random direction for the raycasts from the lamp
         function getRandomDirection() {
             // To get a random direction for the raycast we imagine a circle 
@@ -129,7 +193,7 @@ const scene = {
             return direction.normalize();
         }
 
-        function raycast(origin, direction, near, far, mesh) {
+        function raycast(origin, direction, mesh) {
             raycaster.set(origin, direction);
             const intersects = raycaster.intersectObject(mesh)[0];
         
@@ -153,10 +217,6 @@ const scene = {
 
             if(keys.A) {
                 torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
-                // for(let i = 0; i < sceneObjects.length; i++) {
-                //     sceneElements.sceneGraph.remove(sceneObjects[i]);
-                // }
-                // sceneObjects = [];
             }
             if(keys.D) {
                 torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
