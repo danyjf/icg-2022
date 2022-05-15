@@ -46,7 +46,7 @@ const objects = {
         flower.position.set(posX, posY, posZ);
         flower.scale.set(0.0001, 0.0001, 0.0001);
     
-        return {object3D: flower, isGrowing: true, isDying: false};
+        return flower;
     },
 
     createTree: function createTree(posX, posY, posZ) {

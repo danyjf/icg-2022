@@ -78,8 +78,8 @@ const scene = {
 
                 const object = objects.createFlower(point.x, point.y, point.z);
                 sceneObjects.push(object);
-                sceneElements.sceneGraph.add(object.object3D);
-                object.object3D.lookAt(normal);
+                sceneElements.sceneGraph.add(object);
+                object.lookAt(normal);
             }
 
             allInstancesInfo = [];
@@ -87,34 +87,21 @@ const scene = {
         }
 
         for(let i = 0; i < sceneObjects.length; i++) {
-            // TODO: Check if the object is still under the light
-            // if the object is not then set it to dying
-            if(!isUnderLight(sceneObjects[i].object3D, lamp)) {
-                sceneObjects[i].isDying = true;
-                sceneObjects[i].isGrowing = false;
+            if(isUnderLight(sceneObjects[i], lamp)) {
+                if(sceneObjects[i].scale.x < 1) {
+                    sceneObjects[i].scale.x += 0.005;
+                    sceneObjects[i].scale.y += 0.005;
+                    sceneObjects[i].scale.z += 0.005;
+                }
             } else {
-                sceneObjects[i].isDying = false;
-                sceneObjects[i].isGrowing = true;
-            }
-
-            if(sceneObjects[i].object3D.scale.x >= 1) {
-                sceneObjects[i].isGrowing = false;
-            }
-
-            if(sceneObjects[i].object3D.scale.x < 0) {
-                sceneElements.sceneGraph.remove(sceneObjects[i].object3D);
-            }
-            
-            if(sceneObjects[i].isGrowing) {
-                sceneObjects[i].object3D.scale.x += 0.005;
-                sceneObjects[i].object3D.scale.y += 0.005;
-                sceneObjects[i].object3D.scale.z += 0.005;
-            }
-
-            if(sceneObjects[i].isDying) {
-                sceneObjects[i].object3D.scale.x -= 0.005;
-                sceneObjects[i].object3D.scale.y -= 0.005;
-                sceneObjects[i].object3D.scale.z -= 0.005;
+                sceneObjects[i].scale.x -= 0.005;
+                sceneObjects[i].scale.y -= 0.005;
+                sceneObjects[i].scale.z -= 0.005;
+                
+                if(sceneObjects[i].scale.x < 0) {
+                    sceneElements.sceneGraph.remove(sceneObjects[i]);
+                    sceneObjects.splice(i, 1);
+                }
             }
         }
 
