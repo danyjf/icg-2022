@@ -14,14 +14,14 @@ const helper = {
         camera.lookAt(0, 0, 0);
 
         // Add ambient light
-        const ambientLight = new THREE.AmbientLight('rgb(255, 255, 255)', 0.2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.325);
         sceneElements.sceneGraph.add(ambientLight);
 
         // Create renderer (with shadow map)
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         sceneElements.renderer = renderer;
         renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setClearColor('rgb(255, 255, 255)', 1.0);
+        renderer.setClearColor(0xe39469, 1.0);
         renderer.setSize(width, height);
 
         // Setup shadowMap property

@@ -12,7 +12,7 @@ const scene = {
     // Function called once at the start
     start: function start(sceneGraph) {
         // Create torus
-        const torus = objects.createTorus(0xbbff00, 20, 8, 32, 100);
+        const torus = objects.createTorus(0xc1ff80, 20, 8, 32, 100);
         torus.rotation.x = Math.PI / 2;
         torus.name = "torus";
         
@@ -60,45 +60,73 @@ const scene = {
         
         spawnTimer += clock.getDelta();
 
-        if(spawnTimer > 1) {
+        if(spawnTimer > 0.05 && sceneObjects.length < 75) {
             for(let i = 0; i < count; i++) {
                 let direction = getRandomDirection();
                 direction.transformDirection(lamp.matrixWorld);
-
+                
                 const instanceInfo = raycast(lampPosition, direction, torus);
                 if(instanceInfo) {
                     allInstancesInfo.push(instanceInfo);
                 }
             }
-
+            
             for(let i = 0; i < allInstancesInfo.length; i++) {
                 const point = allInstancesInfo[i].point;
                 const normal = allInstancesInfo[i].normal;
-
+                
                 const object = objects.createRandomObject(point.x, point.y, point.z);
                 sceneObjects.push(object);
-                sceneElements.sceneGraph.add(object);
-                object.lookAt(normal);
+                sceneElements.sceneGraph.add(object.object3D);
+                object.object3D.lookAt(normal);
             }
-
+            
             allInstancesInfo = [];
             spawnTimer = 0;
+            // console.log(sceneObjects.length);
         }
 
         for(let i = 0; i < sceneObjects.length; i++) {
-            if(isUnderLight(sceneObjects[i], lamp)) {
-                if(sceneObjects[i].scale.x < 1) {
-                    sceneObjects[i].scale.x += 0.005;
-                    sceneObjects[i].scale.y += 0.005;
-                    sceneObjects[i].scale.z += 0.005;
+            const underLight = isUnderLight(sceneObjects[i].object3D, lamp);
+            if(underLight) {
+                sceneObjects[i].isGrowing = true;
+                sceneObjects[i].isDying = false;
+                sceneObjects[i].isDead = false;
+            } else if(!underLight) {
+                sceneObjects[i].isGrowing = false;
+                sceneObjects[i].isDying = true;
+                sceneObjects[i].isDead = false;
+            }
+
+            if(sceneObjects[i].isGrowing && sceneObjects[i].object3D.scale.x < 1) {
+                sceneObjects[i].object3D.scale.x += 0.005;
+                sceneObjects[i].object3D.scale.y += 0.005;
+                sceneObjects[i].object3D.scale.z += 0.005;
+            }
+
+            if(sceneObjects[i].isDying) {
+                const targetColor = new THREE.Color(0.87, 0.47, 0.28);
+                sceneObjects[i].material.color.lerp(targetColor, 0.025);
+
+                // check if the material color is very close to the target color
+                if(
+                    Math.abs(sceneObjects[i].material.color.r - targetColor.r) < 0.01 
+                    && Math.abs(sceneObjects[i].material.color.g - targetColor.g) < 0.01
+                    && Math.abs(sceneObjects[i].material.color.b - targetColor.b) < 0.01
+                ) {
+                    sceneObjects[i].isGrowing = false;
+                    sceneObjects[i].isDying = false;
+                    sceneObjects[i].isDead = true;
                 }
-            } else {
-                sceneObjects[i].scale.x -= 0.005;
-                sceneObjects[i].scale.y -= 0.005;
-                sceneObjects[i].scale.z -= 0.005;
+            }
+
+            if(sceneObjects[i].isDead) {
+                sceneObjects[i].object3D.scale.x -= 0.005;
+                sceneObjects[i].object3D.scale.y -= 0.005;
+                sceneObjects[i].object3D.scale.z -= 0.005;
                 
-                if(sceneObjects[i].scale.x < 0) {
-                    sceneElements.sceneGraph.remove(sceneObjects[i]);
+                if(sceneObjects[i].object3D.scale.x < 0) {
+                    sceneElements.sceneGraph.remove(sceneObjects[i].object3D);
                     sceneObjects.splice(i, 1);
                 }
             }
@@ -114,6 +142,10 @@ const scene = {
         function isUnderLight(object, lightSource) {
             let objectPos = object.position.clone();
             lightSource.worldToLocal(objectPos);
+
+            if(objectPos.length() > 10) {
+                return false;
+            }
 
             let direction = objectPos.normalize();
 

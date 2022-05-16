@@ -30,32 +30,32 @@ const objects = {
         ];
         const petals = new THREE.Group();
         const petalGeometry = new THREE.PlaneGeometry(0.5, 0.5);
-        const material = new THREE.MeshBasicMaterial(
+        const petalMaterial = new THREE.MeshBasicMaterial(
             {color: petalColors[helper.randomIntFromInterval(0, petalColors.length - 1)], side: THREE.DoubleSide}
         );
         
-        var petal = new THREE.Mesh(petalGeometry, material);
+        var petal = new THREE.Mesh(petalGeometry, petalMaterial);
         petal.position.set(-0.25, -0.4, 0.4);
         petals.add(petal);
 
         petal.castShadow = true;
         petal.receiveShadow = true;
     
-        petal = new THREE.Mesh(petalGeometry, material);
+        petal = new THREE.Mesh(petalGeometry, petalMaterial);
         petal.position.set(0, -0.2, 0.4);
         petals.add(petal);
 
         petal.castShadow = true;
         petal.receiveShadow = true;
     
-        petal = new THREE.Mesh(petalGeometry, material);
+        petal = new THREE.Mesh(petalGeometry, petalMaterial);
         petal.position.set(0.25, -0.4, 0.4);
         petals.add(petal);
 
         petal.castShadow = true;
         petal.receiveShadow = true;
     
-        petal = new THREE.Mesh(petalGeometry, material);
+        petal = new THREE.Mesh(petalGeometry, petalMaterial);
         petal.position.set(0, -0.6, 0.4);
         petals.add(petal);
 
@@ -73,7 +73,7 @@ const objects = {
         flower.position.set(posX, posY, posZ);
         flower.scale.set(0.0001, 0.0001, 0.0001);
     
-        return flower;
+        return {object3D: flower, material: petalMaterial, isGrowing: true, isDying: false, isDead: false};
     },
 
     createTree: function createTree(posX, posY, posZ) {
@@ -106,7 +106,7 @@ const objects = {
         tree.position.set(posX, posY, posZ);
         tree.scale.set(0.0001, 0.0001, 0.0001);
 
-        return tree;
+        return {object3D: tree, material: leafsMaterial, isGrowing: true, isDying: false, isDead: false};
     },
 
     createGrass: function createGrass(posX, posY, posZ) {
@@ -128,6 +128,7 @@ const objects = {
 
         spotLight.angle = angle;
         spotLight.penumbra = penumbra;
+        spotLight.distance = 15;
 
         spotLight.castShadow = true;
         spotLight.shadow.mapSize.width = 1024;
