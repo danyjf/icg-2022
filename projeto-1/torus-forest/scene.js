@@ -11,9 +11,6 @@ let clock = new THREE.Clock();
 const scene = {
     // Function called once at the start
     start: function start(sceneGraph) {
-        // Create spotlight (with shadows)
-        const spotLight = objects.createSpotLight('rgb(255, 255, 255)', 0.8, Math.PI / 6, 0.5);
-        
         // Create torus
         const torus = objects.createTorus(0xbbff00, 20, 8, 32, 100);
         torus.rotation.x = Math.PI / 2;
@@ -28,15 +25,17 @@ const scene = {
         torusTubeCenter.name = "torusTubeCenter";
         torusTubeCenter.position.set(20, 0, 0);
         
+        // Create spotlight (with shadows)
+        const spotLight = objects.createSpotLight(0xffffff, 0.8, Math.PI / 6, 0.5);
+        spotLight.target = torusTubeCenter;
+
         // Create lamp object
         const lamp = objects.createLamp(0xffff00, 0.2, 0.6, 0.4, 32);
         lamp.position.set(0, 15, 0);
         lamp.name = "lamp";
-        
-        spotLight.target = torusTubeCenter;
 
         // Add objects to the scene
-        sceneGraph.add(spotLight);
+        // sceneGraph.add(spotLight);
         sceneGraph.add(torus);
         sceneGraph.add(torusCenter);
         torusCenter.add(torusTubeCenter);

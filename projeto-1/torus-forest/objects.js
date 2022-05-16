@@ -9,6 +9,9 @@ const objects = {
         const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
         const stem = new THREE.Mesh(stemGeometry, stemMaterial);
         stem.rotation.x = Math.PI / 2;
+
+        stem.castShadow = true;
+        stem.receiveShadow = true;
         
         // Create seeds
         const seedsGeometry = new THREE.SphereGeometry(0.1, 8, 4);
@@ -34,18 +37,30 @@ const objects = {
         var petal = new THREE.Mesh(petalGeometry, material);
         petal.position.set(-0.25, -0.4, 0.4);
         petals.add(petal);
+
+        petal.castShadow = true;
+        petal.receiveShadow = true;
     
         petal = new THREE.Mesh(petalGeometry, material);
         petal.position.set(0, -0.2, 0.4);
         petals.add(petal);
+
+        petal.castShadow = true;
+        petal.receiveShadow = true;
     
         petal = new THREE.Mesh(petalGeometry, material);
         petal.position.set(0.25, -0.4, 0.4);
         petals.add(petal);
+
+        petal.castShadow = true;
+        petal.receiveShadow = true;
     
         petal = new THREE.Mesh(petalGeometry, material);
         petal.position.set(0, -0.6, 0.4);
         petals.add(petal);
+
+        petal.castShadow = true;
+        petal.receiveShadow = true;
         
         petals.position.set(0, 0.4, 0);
     
@@ -66,8 +81,12 @@ const objects = {
         const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 16);
         const trunkMaterial = new THREE.MeshPhongMaterial({color: 0x9c4b1c});
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+        
         trunk.position.set(0, 0, 1);
         trunk.rotation.x = Math.PI / 2;
+
+        trunk.castShadow = true;
+        trunk.receiveShadow = true;
 
         // Create leafs
         const leafsGeometry = new THREE.ConeGeometry(0.7, 1.5, 32);
@@ -76,6 +95,9 @@ const objects = {
         
         leafs.rotation.x = Math.PI / 2;
         leafs.position.set(0, 0, 2);
+
+        leafs.castShadow = true;
+        leafs.receiveShadow = true;
 
         var tree = new THREE.Group();
         tree.add(trunk);
@@ -108,8 +130,8 @@ const objects = {
         spotLight.penumbra = penumbra;
 
         spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 2048;
-        spotLight.shadow.mapSize.height = 2048;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
         
         return spotLight;
     },
@@ -117,9 +139,11 @@ const objects = {
     createTorus: function createTorus(color, radius, tubeRadius, radialSegments, tubularSegments) {
         const torusGeometry = new THREE.TorusGeometry(radius, tubeRadius, radialSegments, tubularSegments);
         const torusMaterial = new THREE.MeshPhongMaterial({color: color});
-        const torusObject = new THREE.Mesh(torusGeometry, torusMaterial);
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
-        return torusObject;
+        torus.receiveShadow = true;
+
+        return torus;
     },
 
     createLamp: function createLamp(color, radiusTop, radiusBottom, height, radialSegments) {
