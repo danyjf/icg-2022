@@ -76,7 +76,7 @@ const scene = {
                 const point = allInstancesInfo[i].point;
                 const normal = allInstancesInfo[i].normal;
 
-                const object = objects.createFlower(point.x, point.y, point.z);
+                const object = objects.createRandomObject(point.x, point.y, point.z);
                 sceneObjects.push(object);
                 sceneElements.sceneGraph.add(object);
                 object.lookAt(normal);

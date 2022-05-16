@@ -1,6 +1,8 @@
 ﻿"use strict";
 
 const objects = {
+    possibleObjects: ["flower", "tree"],
+
     createFlower: function createFlower(posX, posY, posZ) {
         // Create stem
         const stemGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 6);
@@ -60,11 +62,43 @@ const objects = {
     },
 
     createTree: function createTree(posX, posY, posZ) {
+        // Create trunk
+        const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 16);
+        const trunkMaterial = new THREE.MeshPhongMaterial({color: 0x9c4b1c});
+        const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+        trunk.position.set(0, 0, 1);
+        trunk.rotation.x = Math.PI / 2;
 
+        // Create leafs
+        const leafsGeometry = new THREE.ConeGeometry(0.7, 1.5, 32);
+        const leafsMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
+        const leafs = new THREE.Mesh(leafsGeometry, leafsMaterial);
+        
+        leafs.rotation.x = Math.PI / 2;
+        leafs.position.set(0, 0, 2);
+
+        var tree = new THREE.Group();
+        tree.add(trunk);
+        tree.add(leafs);
+
+        tree.position.set(posX, posY, posZ);
+        tree.scale.set(0.0001, 0.0001, 0.0001);
+
+        return tree;
     },
 
     createGrass: function createGrass(posX, posY, posZ) {
 
+    },
+
+    createRandomObject: function createRandomObject(posX, posY, posZ) {
+        const i = helper.randomIntFromInterval(0, this.possibleObjects.length - 1);
+        switch(this.possibleObjects[i]) {
+            case "flower":
+                return this.createFlower(posX, posY, posZ);
+            case "tree":
+                return this.createTree(posX, posY, posZ);
+        }
     },
 
     createSpotLight: function createSpotLight(color, intensity, angle, penumbra) {
