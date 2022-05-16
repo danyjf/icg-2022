@@ -1,5 +1,8 @@
 "use strict";
 
+const SPAWN_TIME = 1;
+const MAX_LIVE_PLANTS = 1;
+
 let allInstancesInfo = [];
 const count = 1;
 let sceneObjects = [];
@@ -55,12 +58,13 @@ const scene = {
         const lampPosition = new THREE.Vector3();
         lamp.getWorldPosition(lampPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
+        const deltaTime = clock.getDelta();
 
         controls(torusCenter, torusTubeCenter);
         
-        spawnTimer += clock.getDelta();
+        spawnTimer += deltaTime;
 
-        if(spawnTimer > 0.05 && sceneObjects.length < 75) {
+        if(spawnTimer > SPAWN_TIME && sceneObjects.length < MAX_LIVE_PLANTS) {
             for(let i = 0; i < count; i++) {
                 let direction = getRandomDirection();
                 direction.transformDirection(lamp.matrixWorld);
@@ -83,40 +87,55 @@ const scene = {
             
             allInstancesInfo = [];
             spawnTimer = 0;
-            // console.log(sceneObjects.length);
         }
 
         for(let i = 0; i < sceneObjects.length; i++) {
+            sceneObjects[i].lifeTime -= deltaTime;
+
             const underLight = isUnderLight(sceneObjects[i].object3D, lamp);
-            if(underLight) {
-                sceneObjects[i].isGrowing = true;
+
+            if(sceneObjects[i].object3D.scale.x > 1) {
+                sceneObjects[i].isGrowing = false;
                 sceneObjects[i].isDying = false;
                 sceneObjects[i].isDead = false;
-            } else if(!underLight) {
-                sceneObjects[i].isGrowing = false;
-                sceneObjects[i].isDying = true;
-                sceneObjects[i].isDead = false;
+
+                sceneObjects[i].object3D.scale.set(1, 1, 1);
             }
 
-            if(sceneObjects[i].isGrowing && sceneObjects[i].object3D.scale.x < 1) {
+            if(underLight && sceneObjects[i].isGrowing) {
                 sceneObjects[i].object3D.scale.x += 0.005;
                 sceneObjects[i].object3D.scale.y += 0.005;
                 sceneObjects[i].object3D.scale.z += 0.005;
             }
 
-            if(sceneObjects[i].isDying) {
-                const targetColor = new THREE.Color(0.87, 0.47, 0.28);
-                sceneObjects[i].material.color.lerp(targetColor, 0.025);
+            if(!underLight) {
+                sceneObjects[i].isGrowing = false;
+                sceneObjects[i].isDying = true;
+                sceneObjects[i].isDead = false;
+            }
 
-                // check if the material color is very close to the target color
-                if(
-                    Math.abs(sceneObjects[i].material.color.r - targetColor.r) < 0.01 
-                    && Math.abs(sceneObjects[i].material.color.g - targetColor.g) < 0.01
-                    && Math.abs(sceneObjects[i].material.color.b - targetColor.b) < 0.01
-                ) {
+            if(!underLight && sceneObjects[i].isDying || sceneObjects[i].lifeTime < 0) {
+                const targetColor = new THREE.Color(0.87, 0.47, 0.28);
+                sceneObjects[i].material.color.lerp(targetColor, 0.02);
+
+                if(helper.equalColors(sceneObjects[i].material.color, targetColor, 0.05)) {
+                    sceneObjects[i].material.color.set(targetColor);
+
                     sceneObjects[i].isGrowing = false;
                     sceneObjects[i].isDying = false;
                     sceneObjects[i].isDead = true;
+                }
+            }
+
+            if(underLight && sceneObjects[i].isDying) {
+                sceneObjects[i].material.color.lerp(sceneObjects[i].originalColor, 0.05);
+
+                if(helper.equalColors(sceneObjects[i].material.color, sceneObjects[i].originalColor, 0.05)) {
+                    sceneObjects[i].material.color.set(sceneObjects[i].originalColor);
+
+                    sceneObjects[i].isGrowing = true;
+                    sceneObjects[i].isDying = false;
+                    sceneObjects[i].isDead = false;
                 }
             }
 

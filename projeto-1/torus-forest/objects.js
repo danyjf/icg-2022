@@ -73,7 +73,15 @@ const objects = {
         flower.position.set(posX, posY, posZ);
         flower.scale.set(0.0001, 0.0001, 0.0001);
     
-        return {object3D: flower, material: petalMaterial, isGrowing: true, isDying: false, isDead: false};
+        return {
+            object3D: flower, 
+            material: petalMaterial, 
+            originalColor: petalMaterial.color.clone(), 
+            lifeTime: helper.randomIntFromInterval(20, 40), 
+            isGrowing: true, 
+            isDying: false, 
+            isDead: false
+        };
     },
 
     createTree: function createTree(posX, posY, posZ) {
@@ -106,7 +114,15 @@ const objects = {
         tree.position.set(posX, posY, posZ);
         tree.scale.set(0.0001, 0.0001, 0.0001);
 
-        return {object3D: tree, material: leafsMaterial, isGrowing: true, isDying: false, isDead: false};
+        return {
+            object3D: tree, 
+            material: leafsMaterial, 
+            originalColor: leafsMaterial.color.clone(), 
+            lifeTime: helper.randomIntFromInterval(20, 40), 
+            isGrowing: true, 
+            isDying: false, 
+            isDead: false
+        };
     },
 
     createGrass: function createGrass(posX, posY, posZ) {

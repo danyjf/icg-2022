@@ -101,5 +101,17 @@ const helper = {
         min = Math.ceil(min);
         max = Math.ceil(max);
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+
+    equalColors(color1, color2, threshold) {
+        if(
+            Math.abs(color1.r - color2.r) < threshold 
+            && Math.abs(color1.g - color2.g) < threshold
+            && Math.abs(color1.b - color2.b) < threshold
+        ) {
+            return true;
+        }
+        
+        return false;
     }
 };
