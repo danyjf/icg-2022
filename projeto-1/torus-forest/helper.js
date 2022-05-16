@@ -89,5 +89,17 @@ const helper = {
                     break;
             }
         }        
+    },
+
+    // Random float from min (including) to max (excluding)
+    randomFloatFromInterval: function randomFloatFromInterval(min, max) {
+        return Math.random() * (max - min) + min;
+    },
+
+    // Random int from min (including) to max (including)
+    randomIntFromInterval: function randomIntFromInterval(min, max) {
+        min = Math.ceil(min);
+        max = Math.ceil(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 };

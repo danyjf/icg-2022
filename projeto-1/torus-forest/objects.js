@@ -15,9 +15,19 @@ const objects = {
         seeds.position.set(0, 0, 0.4);
     
         // Create petals
+        const petalColors = [
+            0xeb4034,   // red
+            0xeb7d34,   // orange
+            0xebdf34,   // yellow
+            0x3474eb,   // blue
+            0xb134eb,   // purple
+            0xeb347a    // pink
+        ];
         const petals = new THREE.Group();
         const petalGeometry = new THREE.PlaneGeometry(0.5, 0.5);
-        const material = new THREE.MeshBasicMaterial({color: 0x0000ff, side: THREE.DoubleSide});
+        const material = new THREE.MeshBasicMaterial(
+            {color: petalColors[helper.randomIntFromInterval(0, petalColors.length - 1)], side: THREE.DoubleSide}
+        );
         
         var petal = new THREE.Mesh(petalGeometry, material);
         petal.position.set(-0.25, -0.4, 0.4);

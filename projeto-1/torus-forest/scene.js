@@ -145,11 +145,6 @@ const scene = {
             return isInsideCircle(0.5, x, z);
         }
 
-        // random float value inside the interval
-        function randomFromInterval(min, max) {
-            return Math.random() * (max - min) + min;
-        }
-
         // Check if point is inside a circle
         function isInsideCircle(r, x, z) {
             return x * x + z * z < r * r ? true : false;
@@ -167,12 +162,12 @@ const scene = {
             // 4) When coordinates are found create and return a direction
 
             const r = 0.5;
-            let x = randomFromInterval(-r, r);
-            let z = randomFromInterval(-r, r);
+            let x = helper.randomFloatFromInterval(-r, r);
+            let z = helper.randomFloatFromInterval(-r, r);
 
             while(!isInsideCircle(r, x, z)) {
-                x = randomFromInterval(-r, r);
-                z = randomFromInterval(-r, r);
+                x = helper.randomFloatFromInterval(-r, r);
+                z = helper.randomFloatFromInterval(-r, r);
             }
 
             let direction = new THREE.Vector3(x, -1, z)
