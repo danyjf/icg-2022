@@ -160,10 +160,20 @@ const helper = {
 
     // Check if point is inside a circle
     isInsideCircle: function isInsideCircle(r, x, z) {
+        // To check if the point is inside the circle, the 
+        // equation of the circle is used
         return x * x + z * z < r * r ? true : false;
     },
 
     isUnderLight: function isUnderLight(object, lightSource) {
+        /**
+         *  To check if the object is under the light the steps are: 
+         *  1) Transform the position of the object into the local space of the light source
+         *  2) Check if the point is too far away from the light
+         *  3) Use the equation of the plane and the equation of the line to find the intersection
+         *  4) Return whether or not the intersection is inside the circle
+         */
+
         let objectPos = object.position.clone();
         lightSource.worldToLocal(objectPos);
 
@@ -192,7 +202,6 @@ const helper = {
          * t = -1/b
          * z = tc
         */
-
         const t = -1 / direction.y;
         const x = t * direction.x;
         const z = t * direction.z;

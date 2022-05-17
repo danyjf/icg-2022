@@ -76,7 +76,7 @@ const scene = {
             }
 
             if(sceneObjects[i].lifeTime < 0) {
-                changeColor(sceneObjects[i]);
+                changeColor(sceneObjects[i], new THREE.Color(0.87, 0.47, 0.28));
             }
 
             if(sceneObjects[i].isDead) {
@@ -110,7 +110,7 @@ const scene = {
                 sceneObjects[i].isDead = false;
 
                 if(sceneObjects[i].isDying) {
-                    changeColor(sceneObjects[i]);
+                    changeColor(sceneObjects[i], new THREE.Color(0.87, 0.47, 0.28));
                 }
             }
         }
@@ -144,6 +144,15 @@ const scene = {
         }
 
         function spawnObject() {
+            /**
+             *  To spawn an object the steps are:
+             *  1) Find a random direction from the lamp towards the torus
+             *  2) Cast a ray from the lamp with the direction found
+             *  3) Create a random object at the position hit by the raycast
+             *  4) Add the object to the list of objects on scene
+             *  5) Make the object perpendicular to the face hit
+             */
+
             let direction = helper.getRandomDirection();
             direction.transformDirection(lamp.matrixWorld);
             
@@ -159,20 +168,29 @@ const scene = {
             }
         }
 
+        // Linearly increase the scale of the object
         function grow(object) {
             object.scale.x += 0.005;
             object.scale.y += 0.005;
             object.scale.z += 0.005;
         }
 
+        // Linearly decrease the scale of the object
         function die(object) {
             object.scale.x -= 0.005;
             object.scale.y -= 0.005;
             object.scale.z -= 0.005;
         }
 
-        function changeColor(object) {
-            const targetColor = new THREE.Color(0.87, 0.47, 0.28);
+        // Change the color of the object to the target color over time
+        function changeColor(object, targetColor) {
+            /** 
+             *  To change the color of the object the steps are:
+             *  1) Lerp from the material color to the target color
+             *  2) Check if the color is equal to the target color
+             *  3) If they are equal classify the object as dead
+             */  
+
             object.material.color.lerp(targetColor, 0.02);
 
             if(helper.equalColors(object.material.color, targetColor, 0.05)) {
