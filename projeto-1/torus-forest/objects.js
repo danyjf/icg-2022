@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 const objects = {
-    possibleObjects: ["flower", "tree"],
+    possibleObjects: ["flower", "tree", "grass"],
 
     createFlower: function createFlower(posX, posY, posZ) {
         // Create stem
@@ -126,7 +126,63 @@ const objects = {
     },
 
     createGrass: function createGrass(posX, posY, posZ) {
+        // Create grass
+        const grassGeometry = new THREE.ConeGeometry(0.1, 0.5, 3);
+        const grassMaterial = new THREE.MeshPhongMaterial({color: 0x66e37d});
+        const grass1 = new THREE.Mesh(grassGeometry, grassMaterial);
 
+        grass1.rotation.x = Math.PI / 2;
+
+        grass1.castShadow = true;
+        grass1.receiveShadow = true;
+        
+        const grass2 = new THREE.Mesh(grassGeometry, grassMaterial);
+        
+        grass2.rotation.x = Math.PI / 2;
+        grass2.rotation.y = Math.PI / 3;
+        grass2.scale.y = 0.7;
+        grass2.position.set(0.15, 0, -0.075);
+
+        grass2.castShadow = true;
+        grass2.receiveShadow = true;
+
+        const grass3 = new THREE.Mesh(grassGeometry, grassMaterial);
+        
+        grass3.rotation.x = Math.PI / 2;
+        grass3.rotation.y = Math.PI / 6;
+        grass3.scale.y = 1.2;
+        grass3.position.set(0.05, 0.17, 0.05);
+
+        grass3.castShadow = true;
+        grass3.receiveShadow = true;
+
+        const grass4 = new THREE.Mesh(grassGeometry, grassMaterial);
+        
+        grass4.rotation.x = Math.PI / 2;
+        grass4.rotation.y = Math.PI / 2;
+        grass4.position.set(0.2, 0.17, 0);
+
+        grass4.castShadow = true;
+        grass4.receiveShadow = true;
+
+        var grassPatch = new THREE.Group();
+        grassPatch.add(grass1);
+        grassPatch.add(grass2);
+        grassPatch.add(grass3);
+        grassPatch.add(grass4);
+
+        grassPatch.position.set(posX, posY, posZ);
+        grassPatch.scale.set(0.0001, 0.0001, 0.0001);
+
+        return {
+            object3D: grassPatch, 
+            material: grassMaterial, 
+            originalColor: grassMaterial.color.clone(), 
+            lifeTime: helper.randomIntFromInterval(20, 40), 
+            isGrowing: true, 
+            isDying: false, 
+            isDead: false
+        };
     },
 
     createRandomObject: function createRandomObject(posX, posY, posZ) {
@@ -136,6 +192,8 @@ const objects = {
                 return this.createFlower(posX, posY, posZ);
             case "tree":
                 return this.createTree(posX, posY, posZ);
+            case "grass":
+                return this.createGrass(posX, posY, posZ);
         }
     },
 

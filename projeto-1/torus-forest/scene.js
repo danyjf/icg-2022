@@ -1,7 +1,7 @@
 "use strict";
 
-const SPAWN_TIME = 1;
-const MAX_LIVE_PLANTS = 1;
+const SPAWN_TIME = 0.25;
+const MAX_PLANTS = 1000;
 
 let allInstancesInfo = [];
 const count = 1;
@@ -64,7 +64,7 @@ const scene = {
         
         spawnTimer += deltaTime;
 
-        if(spawnTimer > SPAWN_TIME && sceneObjects.length < MAX_LIVE_PLANTS) {
+        if(spawnTimer > SPAWN_TIME && sceneObjects.length < MAX_PLANTS) {
             for(let i = 0; i < count; i++) {
                 let direction = getRandomDirection();
                 direction.transformDirection(lamp.matrixWorld);
@@ -192,7 +192,7 @@ const scene = {
             const x = t * direction.x;
             const z = t * direction.z;
 
-            return isInsideCircle(0.5, x, z);
+            return isInsideCircle(0.6, x, z);
         }
 
         // Check if point is inside a circle
@@ -211,7 +211,7 @@ const scene = {
             // 3) Check if the coordinates are inside the circle
             // 4) When coordinates are found create and return a direction
 
-            const r = 0.5;
+            const r = 0.6;
             let x = helper.randomFloatFromInterval(-r, r);
             let z = helper.randomFloatFromInterval(-r, r);
 
