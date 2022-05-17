@@ -17,6 +17,7 @@ const scene = {
         // Torus center
         const torusCenter = new THREE.Group();
         torusCenter.name = "torusCenter";
+        torusCenter.rotation.y = -Math.PI / 2;
         
         // Create orbit
         const torusTubeCenter = new THREE.Group();
@@ -136,10 +137,10 @@ const scene = {
                 torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
             }
             if(keys.W) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
             }
             if(keys.S) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
             }
         }
 
