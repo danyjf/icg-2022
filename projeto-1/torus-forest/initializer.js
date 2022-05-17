@@ -6,6 +6,8 @@ const sceneElements = {
     camera: null,
     control: null,
     renderer: null,
+    raycaster: null,
+    clock: null
 };
 
 helper.initEmptyScene(sceneElements);

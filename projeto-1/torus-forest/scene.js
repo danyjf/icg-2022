@@ -1,15 +1,10 @@
 "use strict";
 
 const SPAWN_TIME = 0.25;
-const MAX_PLANTS = 1000;
+const MAX_OBJECTS = 1000;
 
-let allInstancesInfo = [];
-const count = 1;
 let sceneObjects = [];
-const raycaster = new THREE.Raycaster();
-raycaster.far = 9;
 let spawnTimer = 0;
-let clock = new THREE.Clock();
 
 const scene = {
     // Function called once at the start
@@ -38,7 +33,6 @@ const scene = {
         lamp.name = "lamp";
 
         // Add objects to the scene
-        // sceneGraph.add(spotLight);
         sceneGraph.add(torus);
         sceneGraph.add(torusCenter);
         torusCenter.add(torusTubeCenter);
@@ -52,47 +46,26 @@ const scene = {
     update: function update(time) {
         const torusCenter = sceneElements.sceneGraph.getObjectByName("torusCenter");
         const torusTubeCenter = sceneElements.sceneGraph.getObjectByName("torusTubeCenter");
-        const torusTubeCenterPosition = new THREE.Vector3();
-        torusTubeCenter.getWorldPosition(torusTubeCenterPosition);
         const lamp = sceneElements.sceneGraph.getObjectByName("lamp");
-        const lampPosition = new THREE.Vector3();
-        lamp.getWorldPosition(lampPosition);
+        const lampWorldPosition = new THREE.Vector3();
+        lamp.getWorldPosition(lampWorldPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
-        const deltaTime = clock.getDelta();
+        const deltaTime = sceneElements.clock.getDelta();
 
         controls(torusCenter, torusTubeCenter);
         
         spawnTimer += deltaTime;
 
-        if(spawnTimer > SPAWN_TIME && sceneObjects.length < MAX_PLANTS) {
-            for(let i = 0; i < count; i++) {
-                let direction = getRandomDirection();
-                direction.transformDirection(lamp.matrixWorld);
-                
-                const instanceInfo = raycast(lampPosition, direction, torus);
-                if(instanceInfo) {
-                    allInstancesInfo.push(instanceInfo);
-                }
-            }
+        if(spawnTimer > SPAWN_TIME && sceneObjects.length < MAX_OBJECTS) {
+            spawnObject();
             
-            for(let i = 0; i < allInstancesInfo.length; i++) {
-                const point = allInstancesInfo[i].point;
-                const normal = allInstancesInfo[i].normal;
-                
-                const object = objects.createRandomObject(point.x, point.y, point.z);
-                sceneObjects.push(object);
-                sceneElements.sceneGraph.add(object.object3D);
-                object.object3D.lookAt(normal);
-            }
-            
-            allInstancesInfo = [];
             spawnTimer = 0;
         }
 
         for(let i = 0; i < sceneObjects.length; i++) {
             sceneObjects[i].lifeTime -= deltaTime;
 
-            const underLight = isUnderLight(sceneObjects[i].object3D, lamp);
+            const underLight = helper.isUnderLight(sceneObjects[i].object3D, lamp);
 
             if(sceneObjects[i].object3D.scale.x > 1) {
                 sceneObjects[i].isGrowing = false;
@@ -102,51 +75,42 @@ const scene = {
                 sceneObjects[i].object3D.scale.set(1, 1, 1);
             }
 
-            if(underLight && sceneObjects[i].isGrowing) {
-                sceneObjects[i].object3D.scale.x += 0.005;
-                sceneObjects[i].object3D.scale.y += 0.005;
-                sceneObjects[i].object3D.scale.z += 0.005;
-            }
-
-            if(!underLight) {
-                sceneObjects[i].isGrowing = false;
-                sceneObjects[i].isDying = true;
-                sceneObjects[i].isDead = false;
-            }
-
-            if(!underLight && sceneObjects[i].isDying || sceneObjects[i].lifeTime < 0) {
-                const targetColor = new THREE.Color(0.87, 0.47, 0.28);
-                sceneObjects[i].material.color.lerp(targetColor, 0.02);
-
-                if(helper.equalColors(sceneObjects[i].material.color, targetColor, 0.05)) {
-                    sceneObjects[i].material.color.set(targetColor);
-
-                    sceneObjects[i].isGrowing = false;
-                    sceneObjects[i].isDying = false;
-                    sceneObjects[i].isDead = true;
-                }
-            }
-
-            if(underLight && sceneObjects[i].isDying) {
-                sceneObjects[i].material.color.lerp(sceneObjects[i].originalColor, 0.05);
-
-                if(helper.equalColors(sceneObjects[i].material.color, sceneObjects[i].originalColor, 0.05)) {
-                    sceneObjects[i].material.color.set(sceneObjects[i].originalColor);
-
-                    sceneObjects[i].isGrowing = true;
-                    sceneObjects[i].isDying = false;
-                    sceneObjects[i].isDead = false;
-                }
+            if(sceneObjects[i].lifeTime < 0) {
+                changeColor(sceneObjects[i]);
             }
 
             if(sceneObjects[i].isDead) {
-                sceneObjects[i].object3D.scale.x -= 0.005;
-                sceneObjects[i].object3D.scale.y -= 0.005;
-                sceneObjects[i].object3D.scale.z -= 0.005;
+                die(sceneObjects[i].object3D);
                 
                 if(sceneObjects[i].object3D.scale.x < 0) {
                     sceneElements.sceneGraph.remove(sceneObjects[i].object3D);
                     sceneObjects.splice(i, 1);
+                }
+            }
+
+            if(underLight) {
+                if(sceneObjects[i].isGrowing) {
+                    grow(sceneObjects[i].object3D);
+                }
+
+                if(sceneObjects[i].isDying) {
+                    sceneObjects[i].material.color.lerp(sceneObjects[i].originalColor, 0.05);
+
+                    if(helper.equalColors(sceneObjects[i].material.color, sceneObjects[i].originalColor, 0.05)) {
+                        sceneObjects[i].material.color.set(sceneObjects[i].originalColor);
+
+                        sceneObjects[i].isGrowing = true;
+                        sceneObjects[i].isDying = false;
+                        sceneObjects[i].isDead = false;
+                    }
+                }
+            } else {
+                sceneObjects[i].isGrowing = false;
+                sceneObjects[i].isDying = true;
+                sceneObjects[i].isDead = false;
+
+                if(sceneObjects[i].isDying) {
+                    changeColor(sceneObjects[i]);
                 }
             }
         }
@@ -157,85 +121,6 @@ const scene = {
         sceneElements.control.update();
         // Call for the next frame
         requestAnimationFrame(update);
-
-        function isUnderLight(object, lightSource) {
-            let objectPos = object.position.clone();
-            lightSource.worldToLocal(objectPos);
-
-            if(objectPos.length() > 10) {
-                return false;
-            }
-
-            let direction = objectPos.normalize();
-
-            /** 
-             * Plane equation:
-             * x = x
-             * y = -1
-             * z = z
-             * 
-             * Line equation:
-             * x = ta
-             * y = tb
-             * z = tc
-             * 
-             * x = ta
-             * -1 = tb
-             * z = tc
-             * 
-             * x = ta
-             * t = -1/b
-             * z = tc
-            */
-
-            const t = -1 / direction.y;
-            const x = t * direction.x;
-            const z = t * direction.z;
-
-            return isInsideCircle(0.6, x, z);
-        }
-
-        // Check if point is inside a circle
-        function isInsideCircle(r, x, z) {
-            return x * x + z * z < r * r ? true : false;
-        }
-
-        // TODO: Change this to use polar coordinates
-        // Get random direction for the raycasts from the lamp
-        function getRandomDirection() {
-            // To get a random direction for the raycast we imagine a circle 
-            // that is under the lamp and pick a random point inside that
-            // circle to point towards it, so the steps are:
-            // 1) Define a random angle inside the circle [0, 2*PI[
-            // 2) Choose a random distance from the center of the circle [0, radius[
-            // 3) Get the cartesian coordinates from the obtained polar coordinates
-            // 4) Create and return the direction from the ligth to the point inside the circle
-
-            const angle = helper.randomFloatFromInterval(0, 2*Math.PI);
-            const r = helper.randomFloatFromInterval(0, 0.6);
-
-            const x = r * Math.cos(angle);
-            const z = r * Math.sin(angle);
-
-            let direction = new THREE.Vector3(x, -1, z)
-
-            return direction.normalize();
-        }
-
-        function raycast(origin, direction, mesh) {
-            raycaster.set(origin, direction);
-            const intersects = raycaster.intersectObject(mesh)[0];
-        
-            if(intersects) {
-                let normal = intersects.face.normal.clone();
-                normal.transformDirection(mesh.matrixWorld);
-                normal.add(intersects.point);
-        
-                return {point: intersects.point, normal: normal};
-            }
-        
-            return null;
-        }
 
         function controls(torusCenter, torusTubeCenter) {
             // To control the lamp WASD is used to alter the rotation of
@@ -255,6 +140,47 @@ const scene = {
             }
             if(keys.S) {
                 torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+            }
+        }
+
+        function spawnObject() {
+            let direction = helper.getRandomDirection();
+            direction.transformDirection(lamp.matrixWorld);
+            
+            const instanceInfo = helper.raycast(lampWorldPosition, direction, torus);
+            if(instanceInfo) {
+                const point = instanceInfo.point;
+                const normal = instanceInfo.normal;
+
+                const object = objects.createRandomObject(point.x, point.y, point.z);
+                sceneObjects.push(object);
+                sceneElements.sceneGraph.add(object.object3D);
+                object.object3D.lookAt(normal);
+            }
+        }
+
+        function grow(object) {
+            object.scale.x += 0.005;
+            object.scale.y += 0.005;
+            object.scale.z += 0.005;
+        }
+
+        function die(object) {
+            object.scale.x -= 0.005;
+            object.scale.y -= 0.005;
+            object.scale.z -= 0.005;
+        }
+
+        function changeColor(object) {
+            const targetColor = new THREE.Color(0.87, 0.47, 0.28);
+            object.material.color.lerp(targetColor, 0.02);
+
+            if(helper.equalColors(object.material.color, targetColor, 0.05)) {
+                object.material.color.set(targetColor);
+
+                object.isGrowing = false;
+                object.isDying = false;
+                object.isDead = true;
             }
         }
     }
