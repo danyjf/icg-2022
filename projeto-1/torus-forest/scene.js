@@ -17,12 +17,15 @@ const scene = {
         // Torus center
         const torusCenter = new THREE.Group();
         torusCenter.name = "torusCenter";
-        torusCenter.rotation.y = -Math.PI / 2;
+        torusCenter.rotation.x = Math.PI / 2;
+        torusCenter.rotation.y = Math.PI / 2;
         
         // Create orbit
         const torusTubeCenter = new THREE.Group();
         torusTubeCenter.name = "torusTubeCenter";
         torusTubeCenter.position.set(20, 0, 0);
+
+        torusTubeCenter.rotation.z = Math.PI;
         
         // Create spotlight (with shadows)
         const spotLight = objects.createSpotLight(0xffffff, 0.8, Math.PI / 6, 0.5);
@@ -35,10 +38,10 @@ const scene = {
 
         // Add objects to the scene
         sceneGraph.add(torus);
-        sceneGraph.add(torusCenter);
+        torus.add(torusCenter);
         torusCenter.add(torusTubeCenter);
-        lamp.add(spotLight);
         torusTubeCenter.add(lamp);
+        lamp.add(spotLight);
 
         helper.render(sceneElements);
     },
@@ -131,16 +134,16 @@ const scene = {
             // values are always between 0 and 2*PI
 
             if(keys.A) {
-                torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
-            }
-            if(keys.D) {
                 torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
             }
+            if(keys.D) {
+                torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
+            }
             if(keys.W) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
             }
             if(keys.S) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
             }
         }
 
