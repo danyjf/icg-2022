@@ -206,19 +206,16 @@ const scene = {
             // To get a random direction for the raycast we imagine a circle 
             // that is under the lamp and pick a random point inside that
             // circle to point towards it, so the steps are:
-            // 1) Define the radius of the circle
-            // 2) Pick random coordinates inside the circle
-            // 3) Check if the coordinates are inside the circle
-            // 4) When coordinates are found create and return a direction
+            // 1) Define a random angle inside the circle [0, 2*PI[
+            // 2) Choose a random distance from the center of the circle [0, radius[
+            // 3) Get the cartesian coordinates from the obtained polar coordinates
+            // 4) Create and return the direction from the ligth to the point inside the circle
 
-            const r = 0.6;
-            let x = helper.randomFloatFromInterval(-r, r);
-            let z = helper.randomFloatFromInterval(-r, r);
+            const angle = helper.randomFloatFromInterval(0, 2*Math.PI);
+            const r = helper.randomFloatFromInterval(0, 0.6);
 
-            while(!isInsideCircle(r, x, z)) {
-                x = helper.randomFloatFromInterval(-r, r);
-                z = helper.randomFloatFromInterval(-r, r);
-            }
+            const x = r * Math.cos(angle);
+            const z = r * Math.sin(angle);
 
             let direction = new THREE.Vector3(x, -1, z)
 
