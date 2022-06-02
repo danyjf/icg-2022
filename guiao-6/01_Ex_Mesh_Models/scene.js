@@ -305,6 +305,8 @@ function createTetrahedronMesh() {
         15, 16, 17
     ]);
 
+    geometry.normalizeNormals();
+
     const material = new THREE.MeshPhongMaterial({ color: 'rgb(200, 0, 200)', shininess: 100 });
 
     const mesh = new THREE.Mesh(geometry, material);
