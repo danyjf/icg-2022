@@ -87,9 +87,11 @@ const objects = {
     createTree: function createTree(posX, posY, posZ) {
         // Create trunk
         const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 16);
-        const trunkMaterial = new THREE.MeshPhongMaterial({color: 0x9c4b1c});
+        const trunkTexture = new THREE.TextureLoader().load("../assets/textures/bark/Bark_06_basecolor.jpg");
+        const trunkNormalMap = new THREE.TextureLoader().load("../assets/textures/bark/Bark_06_normal.jpg");
+        const trunkMaterial = new THREE.MeshPhongMaterial({map: trunkTexture, normalMap: trunkNormalMap});
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-        
+
         trunk.position.set(0, 0, 1);
         trunk.rotation.x = Math.PI / 2;
 

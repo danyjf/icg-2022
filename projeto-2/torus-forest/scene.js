@@ -36,6 +36,18 @@ const scene = {
         lamp.position.set(0, 15, 0);
         lamp.name = "lamp";
 
+        // Test normal maps
+        const light = new THREE.PointLight(0xffffff, 1, 2);
+        light.position.set(0, 9, 20);
+        light.name = "light";
+        sceneGraph.add(light);
+        const geometry = new THREE.SphereGeometry(0.03, 8, 4);
+        const material = new THREE.MeshBasicMaterial({color: 0xffff00});
+        const sphere = new THREE.Mesh(geometry, material);
+        sphere.position.set(light.position.x, light.position.y, light.position.z);
+        sphere.name = "lightObject";
+        sceneGraph.add(sphere);
+
         // Add objects to the scene
         sceneGraph.add(torus);
         torus.add(torusCenter);
@@ -56,7 +68,13 @@ const scene = {
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
         const deltaTime = sceneElements.clock.getDelta();
 
-        controls(torusCenter, torusTubeCenter);
+        // Test normal maps
+        const light = sceneElements.sceneGraph.getObjectByName("light");
+        light.position.x = Math.sin(time/1000) * 5;
+        const lightObject = sceneElements.sceneGraph.getObjectByName("lightObject");
+        lightObject.position.set(light.position.x, light.position.y, light.position.z);
+
+        // controls(torusCenter, torusTubeCenter);
         
         spawnTimer += deltaTime;
 
@@ -122,7 +140,7 @@ const scene = {
         // Rendering
         helper.render(sceneElements);
         // Update control of the camera
-        sceneElements.control.update();
+        sceneElements.control.update(deltaTime);
         // Call for the next frame
         requestAnimationFrame(update);
 
