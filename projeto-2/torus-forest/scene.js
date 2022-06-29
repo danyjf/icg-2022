@@ -74,7 +74,7 @@ const scene = {
         const lightObject = sceneElements.sceneGraph.getObjectByName("lightObject");
         lightObject.position.set(light.position.x, light.position.y, light.position.z);
 
-        // controls(torusCenter, torusTubeCenter);
+        controls(torusCenter, torusTubeCenter);
         
         spawnTimer += deltaTime;
 
@@ -140,7 +140,7 @@ const scene = {
         // Rendering
         helper.render(sceneElements);
         // Update control of the camera
-        sceneElements.control.update(deltaTime);
+        // sceneElements.control.update(deltaTime);
         // Call for the next frame
         requestAnimationFrame(update);
 
@@ -152,16 +152,20 @@ const scene = {
             // values are always between 0 and 2*PI
 
             if(keys.A) {
-                torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
+                // torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
+                sceneElements.control.moveRight(-.1);
             }
             if(keys.D) {
-                torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
+                // torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
+                sceneElements.control.moveRight(.1);
             }
             if(keys.W) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+                // torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+                sceneElements.control.moveForward(.1);
             }
             if(keys.S) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+                // torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+                sceneElements.control.moveForward(-.1);
             }
         }
 

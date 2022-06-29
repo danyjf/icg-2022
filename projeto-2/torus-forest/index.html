@@ -10,6 +10,7 @@
     <script type="text/javascript" src="lib/three.js" defer></script>
     <script type="text/javascript" src="lib/OrbitControls.js" defer></script>
     <script type="text/javascript" src="lib/FirstPersonControls.js" defer></script>
+    <script type="text/javascript" src="lib/PointerLockControls.js" defer></script>
 
     <script type="text/javascript" src="keys.js" defer></script>
     <script type="text/javascript" src="objects.js" defer></script>
@@ -18,8 +19,43 @@
     <script type="text/javascript" src="initializer.js" defer></script>
 
     <title>Torus Forest</title>
+
+    <style>
+        #blocker {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        #instructions {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <div id="tagTorusForest"></div>
+    <div id="tagTorusForest">
+        <div id="blocker">
+            <div id="instructions">
+                <p style="font-size:36px">
+                    Click to play
+                </p>
+                <p>
+                    Move: WASD<br/>
+                    Look: MOUSE
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
