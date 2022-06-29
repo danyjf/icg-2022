@@ -33,9 +33,20 @@ const helper = {
         htmlElement.appendChild(renderer.domElement);
 
         // Control for the camera
-        sceneElements.control = new THREE.OrbitControls(camera, renderer.domElement);
-        sceneElements.control.screenSpacePanning = true;
-
+        // sceneElements.control = new THREE.OrbitControls(camera, renderer.domElement);
+        // sceneElements.control.screenSpacePanning = true;
+        sceneElements.control = new THREE.FirstPersonControls(camera, renderer.domElement);
+        sceneElements.control.lookSpeed = 0.4;
+        sceneElements.control.movementSpeed = 20;
+        sceneElements.control.noFly = true;
+        sceneElements.control.lookVertical = true;
+        // sceneElements.control.constrainVertical = true;
+        // sceneElements.control.verticalMin = 1.0;
+        // sceneElements.control.verticalMax = 2.0;
+        // sceneElements.control.lon = camera.position.x;
+        // sceneElements.control.lat = 0;
+        // sceneElements.control.lookAt(0, 0, 0);
+        
         // Add raycaster
         sceneElements.raycaster = new THREE.Raycaster();
         sceneElements.raycaster.far = 9;
