@@ -151,17 +151,19 @@ const scene = {
             // or small it's calculated the remainder of 2*PI so that the 
             // values are always between 0 and 2*PI
 
+            let cameraSpeed = 0.4;
+
             if(keys.W) {
-                sceneElements.control.moveForward(.1);
+                sceneElements.control.moveForward(cameraSpeed);
             }
             if(keys.A) {
-                sceneElements.control.moveRight(-.1);
+                sceneElements.control.moveRight(-cameraSpeed);
             }
             if(keys.S) {
-                sceneElements.control.moveForward(-.1);
+                sceneElements.control.moveForward(-cameraSpeed);
             }
             if(keys.D) {
-                sceneElements.control.moveRight(.1);
+                sceneElements.control.moveRight(cameraSpeed);
             }
             if(keys.UP) {
                 torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
