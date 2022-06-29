@@ -36,12 +36,6 @@ const helper = {
         // sceneElements.control = new THREE.OrbitControls(camera, renderer.domElement);
         // sceneElements.control.screenSpacePanning = true;
 
-        // sceneElements.control = new THREE.FirstPersonControls(camera, renderer.domElement);
-        // sceneElements.control.lookSpeed = 0.4;
-        // sceneElements.control.movementSpeed = 20;
-        // sceneElements.control.noFly = true;
-        // sceneElements.control.lookVertical = true;
-        
         sceneElements.control = new THREE.PointerLockControls(camera, renderer.domElement);
         const blocker = document.getElementById( 'blocker' );
         const instructions = document.getElementById( 'instructions' );
@@ -86,34 +80,58 @@ const helper = {
 
         function onDocumentKeyDown(event) {
             switch (event.keyCode) {
-                case 87: //w
+                case 87: // w
                     keys.W = true;
                     break;
-                case 65: //a
+                case 65: // a
                     keys.A = true;
                     break;
-                case 83: //s
+                case 83: // s
                     keys.S = true;
                     break;
-                case 68: //d
+                case 68: // d
                     keys.D = true;
+                    break;
+                case 38: // up arrow
+                    keys.UP = true;
+                    break;
+                case 37: // left arrow
+                    keys.LEFT = true;
+                    break;
+                case 40: // down arrow
+                    keys.DOWN = true;
+                    break;
+                case 39: // right arrow
+                    keys.RIGHT = true;
                     break;
             }
         }
         
         function onDocumentKeyUp(event) {
             switch (event.keyCode) {
-                case 87: //w
+                case 87: // w
                     keys.W = false;
                     break;
-                case 65: //a
+                case 65: // a
                     keys.A = false;
                     break;
-                case 83: //s
+                case 83: // s
                     keys.S = false;
                     break;
-                case 68: //d
+                case 68: // d
                     keys.D = false;
+                    break;
+                case 38: // up arrow
+                    keys.UP = false;
+                    break;
+                case 37: // left arrow
+                    keys.LEFT = false;
+                    break;
+                case 40: // down arrow
+                    keys.DOWN = false;
+                    break;
+                case 39: // right arrow
+                    keys.RIGHT = false;
                     break;
             }
         }        

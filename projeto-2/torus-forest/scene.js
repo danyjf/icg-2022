@@ -151,21 +151,29 @@ const scene = {
             // or small it's calculated the remainder of 2*PI so that the 
             // values are always between 0 and 2*PI
 
-            if(keys.A) {
-                // torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
-                sceneElements.control.moveRight(-.1);
-            }
-            if(keys.D) {
-                // torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
-                sceneElements.control.moveRight(.1);
-            }
             if(keys.W) {
-                // torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
                 sceneElements.control.moveForward(.1);
             }
+            if(keys.A) {
+                sceneElements.control.moveRight(-.1);
+            }
             if(keys.S) {
-                // torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
                 sceneElements.control.moveForward(-.1);
+            }
+            if(keys.D) {
+                sceneElements.control.moveRight(.1);
+            }
+            if(keys.UP) {
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+            }
+            if(keys.LEFT) {
+                torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
+            }
+            if(keys.DOWN) {
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+            }
+            if(keys.RIGHT) {
+                torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
             }
         }
 
