@@ -1,6 +1,6 @@
 ﻿- [x] first person controls
 - [x] use shift to move faster
-- [ ] textures on tree
+- [x] textures on tree
 - [ ] textures on flower
 - [ ] textures on grass
 - [ ] textures on torus

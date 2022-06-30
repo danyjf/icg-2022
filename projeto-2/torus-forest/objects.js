@@ -87,9 +87,9 @@ const objects = {
     createTree: function createTree(posX, posY, posZ) {
         // Create trunk
         const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.3, 2, 16);
-        const trunkTexture = new THREE.TextureLoader().load("../assets/textures/bark/Bark_06_basecolor.jpg");
+        const trunkTexture = new THREE.TextureLoader().load("../assets/textures/bark/Bark_06_height.png");
         const trunkNormalMap = new THREE.TextureLoader().load("../assets/textures/bark/Bark_06_normal.jpg");
-        const trunkMaterial = new THREE.MeshPhongMaterial({map: trunkTexture, normalMap: trunkNormalMap});
+        const trunkMaterial = new THREE.MeshPhongMaterial({color: 0xcc6600, map: trunkTexture, normalMap: trunkNormalMap});
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
 
         trunk.position.set(0, 0, 1);
@@ -99,27 +99,57 @@ const objects = {
         trunk.receiveShadow = true;
 
         // Create leafs
-        const leafsGeometry = new THREE.ConeGeometry(0.7, 1.5, 32);
-        const leafsMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
-        const leafs = new THREE.Mesh(leafsGeometry, leafsMaterial);
+        // const leavesGeometry = new THREE.ConeGeometry(0.7, 1.5, 16);
+        let leavesGeometry = new THREE.SphereGeometry(0.7, 32, 16);
+        const leavesTexture = new THREE.TextureLoader().load("../assets/textures/leaves/Hedge_001_Height.png");
+        leavesTexture.wrapS = THREE.RepeatWrapping;
+        leavesTexture.wrapT = THREE.RepeatWrapping;
+        leavesTexture.repeat.set(2, 2);
+        const leavesNormalMap = new THREE.TextureLoader().load("../assets/textures/leaves/Hedge_001_Normal.jpg");
+        leavesNormalMap.wrapS = THREE.RepeatWrapping;
+        leavesNormalMap.wrapT = THREE.RepeatWrapping;
+        leavesNormalMap.repeat.set(2, 2);
+        const leavesMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00, map: leavesTexture, normalMap: leavesNormalMap});
+
+        const leaves1 = new THREE.Mesh(leavesGeometry, leavesMaterial);
         
-        leafs.rotation.x = Math.PI / 2;
-        leafs.position.set(0, 0, 2);
+        leaves1.rotation.x = Math.PI / 2;
+        leaves1.position.set(0, 0, 1.75);
+        leaves1.castShadow = true;
+        leaves1.receiveShadow = true;
+        
+        leavesGeometry = new THREE.SphereGeometry(0.5, 32, 16);
+        const leaves2 = new THREE.Mesh(leavesGeometry, leavesMaterial);
+        leaves2.rotation.x = Math.PI / 2;
+        leaves2.position.set(0, 0.5, 1.5);
+        leaves2.castShadow = true;
+        leaves2.receiveShadow = true;
+        
+        leavesGeometry = new THREE.SphereGeometry(0.5, 32, 16);
+        const leaves3 = new THREE.Mesh(leavesGeometry, leavesMaterial);
+        leaves3.rotation.x = Math.PI / 2;
+        leaves3.position.set(0.5, 0.1, 1.7);
+        leaves3.castShadow = true;
+        leaves3.receiveShadow = true;
+        
+        let leaves = new THREE.Group();
+        leaves.add(leaves1);
+        leaves.add(leaves2);
+        leaves.add(leaves3);
 
-        leafs.castShadow = true;
-        leafs.receiveShadow = true;
+        leaves.rotation.z = helper.randomFloatFromInterval(0, 2 * Math.PI);
 
-        var tree = new THREE.Group();
+        let tree = new THREE.Group();
         tree.add(trunk);
-        tree.add(leafs);
+        tree.add(leaves);
 
         tree.position.set(posX, posY, posZ);
         tree.scale.set(0.0001, 0.0001, 0.0001);
 
         return {
             object3D: tree, 
-            material: leafsMaterial, 
-            originalColor: leafsMaterial.color.clone(), 
+            material: leavesMaterial, 
+            originalColor: leavesMaterial.color.clone(), 
             lifeTime: helper.randomIntFromInterval(20, 40), 
             isGrowing: true, 
             isDying: false, 
