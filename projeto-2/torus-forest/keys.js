@@ -8,5 +8,6 @@ const keys = {
     UP: false,
     LEFT: false,
     DOWN: false,
-    RIGHT: false
+    RIGHT: false,
+    SHIFT: false
 };

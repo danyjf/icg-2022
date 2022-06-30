@@ -151,7 +151,12 @@ const scene = {
             // or small it's calculated the remainder of 2*PI so that the 
             // values are always between 0 and 2*PI
 
-            let cameraSpeed = 0.4;
+            let cameraSpeed = 0.1;
+            let lampSpeed = 0.02;
+
+            if(keys.SHIFT) {
+                cameraSpeed *= 4;
+            }
 
             if(keys.W) {
                 sceneElements.control.moveForward(cameraSpeed);
@@ -166,16 +171,16 @@ const scene = {
                 sceneElements.control.moveRight(cameraSpeed);
             }
             if(keys.UP) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - 0.02) % (2 * Math.PI);
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z - lampSpeed) % (2 * Math.PI);
             }
             if(keys.LEFT) {
-                torusCenter.rotation.y = (torusCenter.rotation.y + 0.02) % (2 * Math.PI);
+                torusCenter.rotation.y = (torusCenter.rotation.y + lampSpeed) % (2 * Math.PI);
             }
             if(keys.DOWN) {
-                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + 0.02) % (2 * Math.PI);
+                torusTubeCenter.rotation.z = (torusTubeCenter.rotation.z + lampSpeed) % (2 * Math.PI);
             }
             if(keys.RIGHT) {
-                torusCenter.rotation.y = (torusCenter.rotation.y - 0.02) % (2 * Math.PI);
+                torusCenter.rotation.y = (torusCenter.rotation.y - lampSpeed) % (2 * Math.PI);
             }
         }
 

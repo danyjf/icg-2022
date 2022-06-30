@@ -1,5 +1,5 @@
 ﻿- [x] first person controls
-- [ ] use shift to move faster
+- [x] use shift to move faster
 - [ ] textures on tree
 - [ ] textures on flower
 - [ ] textures on grass

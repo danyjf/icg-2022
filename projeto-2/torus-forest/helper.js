@@ -104,6 +104,9 @@ const helper = {
                 case 39: // right arrow
                     keys.RIGHT = true;
                     break;
+                case 16: // shift
+                    keys.SHIFT = true;
+                    break;
             }
         }
         
@@ -132,6 +135,9 @@ const helper = {
                     break;
                 case 39: // right arrow
                     keys.RIGHT = false;
+                    break;
+                case 16: // shift
+                    keys.SHIFT = false;
                     break;
             }
         }        
