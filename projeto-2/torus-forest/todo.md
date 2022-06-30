@@ -1,11 +1,11 @@
-﻿[x] first person controls
-[] use shift to move faster
-[] textures on tree
-[] textures on flower
-[] textures on grass
-[] textures on torus
-[] add rock
-[] make objects not spawn on rock
-[] textures on rock
-[] fireflies
-[] adjust ambient light
+﻿- [x] first person controls
+- [] use shift to move faster
+- [] textures on tree
+- [] textures on flower
+- [] textures on grass
+- [] textures on torus
+- [] add rock
+- [] make objects not spawn on rock
+- [] textures on rock
+- [] fireflies
+- [] adjust ambient light
