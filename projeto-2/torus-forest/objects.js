@@ -182,7 +182,20 @@ const objects = {
 
     createTorus: function createTorus(color, radius, tubeRadius, radialSegments, tubularSegments) {
         const torusGeometry = new THREE.TorusGeometry(radius, tubeRadius, radialSegments, tubularSegments);
-        const torusMaterial = new THREE.MeshPhongMaterial({color: color});
+        
+        const groundTexture = new THREE.TextureLoader().load("assets/textures/ground/Ground_Grass_001_COLOR.jpg");
+        groundTexture.wrapS = THREE.RepeatWrapping;
+        groundTexture.wrapT = THREE.RepeatWrapping;
+        groundTexture.repeat.set(40, 25);
+
+        const groundNormalMap = new THREE.TextureLoader().load("assets/textures/ground/Ground_Grass_001_NORM.jpg");
+        groundNormalMap.wrapS = THREE.RepeatWrapping;
+        groundNormalMap.wrapT = THREE.RepeatWrapping;
+        groundNormalMap.repeat.set(40, 25);
+
+        // const torusMaterial = new THREE.MeshPhongMaterial({color: color});
+        const torusMaterial = new THREE.MeshPhongMaterial({map: groundTexture, normalMap: groundNormalMap});
+        
         const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
         torus.receiveShadow = true;
