@@ -24,12 +24,14 @@ const objects = {
 
         flower.children[0].position.z = -1.1;
         flower.children[0].rotation.x = Math.PI / 2;
+        flower.children[0].rotation.y = helper.randomFloatFromInterval(0, 2 * Math.PI);
         flower.children[0].scale.set(2, 1, 2);
         flower.children[0].material = petalMaterial;
         flower.children[0].castShadow = true;
         flower.children[0].receiveShadow = true;
 
         flower.children[1].rotation.x = Math.PI / 2;
+        flower.children[0].rotation.y = helper.randomFloatFromInterval(0, 2 * Math.PI);
         flower.children[1].scale.set(1.5, 0.1, 1.5);
         flower.children[1].material = stemMaterial;
         flower.children[1].castShadow = true;
