@@ -3,76 +3,44 @@
 const objects = {
     possibleObjects: ["flower", "tree", "grass"],
 
-    createFlower: function createFlower(posX, posY, posZ) {
-        // Create stem
-        const stemGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.8, 6);
-        const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
-        const stem = new THREE.Mesh(stemGeometry, stemMaterial);
-        stem.rotation.x = Math.PI / 2;
+    flowerObject: null,
 
-        stem.castShadow = true;
-        stem.receiveShadow = true;
-        
-        // Create seeds
-        const seedsGeometry = new THREE.SphereGeometry(0.1, 8, 4);
-        const seedsMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
-        const seeds = new THREE.Mesh(seedsGeometry, seedsMaterial);
-        seeds.position.set(0, 0, 0.4);
-    
-        // Create petals
+    createFlower: function createFlower(posX, posY, posZ) {
         const petalColors = [
             0xeb4034,   // red
-            0xeb7d34,   // orange
             0xebdf34,   // yellow
             0x3474eb,   // blue
             0xb134eb,   // purple
             0xeb347a    // pink
         ];
-        const petals = new THREE.Group();
-        const petalGeometry = new THREE.PlaneGeometry(0.5, 0.5);
-        const petalMaterial = new THREE.MeshBasicMaterial(
-            {color: petalColors[helper.randomIntFromInterval(0, petalColors.length - 1)], side: THREE.DoubleSide}
-        );
-        
-        var petal = new THREE.Mesh(petalGeometry, petalMaterial);
-        petal.position.set(-0.25, -0.4, 0.4);
-        petals.add(petal);
 
-        petal.castShadow = true;
-        petal.receiveShadow = true;
-    
-        petal = new THREE.Mesh(petalGeometry, petalMaterial);
-        petal.position.set(0, -0.2, 0.4);
-        petals.add(petal);
+        let flower = this.flowerObject.clone();
 
-        petal.castShadow = true;
-        petal.receiveShadow = true;
-    
-        petal = new THREE.Mesh(petalGeometry, petalMaterial);
-        petal.position.set(0.25, -0.4, 0.4);
-        petals.add(petal);
+        const petalMaterial = new THREE.MeshPhongMaterial({color: petalColors[helper.randomIntFromInterval(0, petalColors.length - 1)], side: THREE.DoubleSide});
+        const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00, side: THREE.DoubleSide});
 
-        petal.castShadow = true;
-        petal.receiveShadow = true;
-    
-        petal = new THREE.Mesh(petalGeometry, petalMaterial);
-        petal.position.set(0, -0.6, 0.4);
-        petals.add(petal);
+        flower.children[0].position.z = -1.1;
+        flower.children[0].rotation.x = Math.PI / 2;
+        flower.children[0].scale.set(2, 1, 2);
+        flower.children[0].material = petalMaterial;
+        flower.children[0].castShadow = true;
+        flower.children[0].receiveShadow = true;
 
-        petal.castShadow = true;
-        petal.receiveShadow = true;
-        
-        petals.position.set(0, 0.4, 0);
-    
-        // Create flower
-        var flower = new THREE.Group();
-        flower.add(stem);
+        flower.children[1].rotation.x = Math.PI / 2;
+        flower.children[1].scale.set(1.5, 0.1, 1.5);
+        flower.children[1].material = stemMaterial;
+        flower.children[1].castShadow = true;
+        flower.children[1].receiveShadow = true;
+
+        const seedsGeometry = new THREE.SphereGeometry(0.035, 8, 4);
+        const seedsMaterial = new THREE.MeshPhongMaterial({color: 0xffff00});
+        const seeds = new THREE.Mesh(seedsGeometry, seedsMaterial);
+        seeds.position.set(0, 0, 0.22);
         flower.add(seeds);
-        flower.add(petals);
-    
+
         flower.position.set(posX, posY, posZ);
         flower.scale.set(0.0001, 0.0001, 0.0001);
-    
+
         return {
             object3D: flower, 
             material: petalMaterial, 
