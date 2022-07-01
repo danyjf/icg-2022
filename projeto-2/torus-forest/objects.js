@@ -3,7 +3,9 @@
 const objects = {
     possibleObjects: ["flower", "tree", "grass"],
 
-    flowerObject: null,
+    loadedObjects: {
+        flowerObject: null
+    },
 
     createFlower: function createFlower(posX, posY, posZ) {
         const petalColors = [
@@ -14,7 +16,7 @@ const objects = {
             0xeb347a    // pink
         ];
 
-        let flower = this.flowerObject.clone();
+        let flower = this.loadedObjects.flowerObject.clone();
 
         const petalMaterial = new THREE.MeshPhongMaterial({color: petalColors[helper.randomIntFromInterval(0, petalColors.length - 1)], side: THREE.DoubleSide});
         const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00, side: THREE.DoubleSide});
