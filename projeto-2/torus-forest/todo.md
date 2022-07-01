@@ -3,7 +3,7 @@
 - [x] textures on tree
 - [x] textures on flower
 - [x] load flower geometries using wait
-- [ ] textures on grass
+- [x] textures on grass
 - [ ] textures on torus
 - [ ] add rock
 - [ ] make objects not spawn on rock
