@@ -2,7 +2,7 @@
 - [x] use shift to move faster
 - [x] textures on tree
 - [x] textures on flower
-- [ ] load flower geometries using wait
+- [x] load flower geometries using wait
 - [ ] textures on grass
 - [ ] textures on torus
 - [ ] add rock
