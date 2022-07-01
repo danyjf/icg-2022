@@ -61,7 +61,10 @@ const helper = {
 
     loadObjects: async function loadObjects(loader) {
         // Load flower object
-        objects.loadedObjects.flowerObject = await sceneElements.objLoader.loadAsync("assets/models/flower.obj");
+        objects.loadedObjects.flowerObject = await loader.loadAsync("assets/models/flower.obj");
+
+        // Load grass object
+        objects.loadedObjects.grassObject = await loader.loadAsync("assets/models/grass.obj");
     },
 
     render: function render(sceneElements) {
