@@ -7,10 +7,12 @@ const sceneElements = {
     control: null,
     renderer: null,
     raycaster: null,
-    clock: null
+    clock: null,
+    objLoader: null
 };
 
 helper.initEmptyScene(sceneElements);
+helper.loadObjects(sceneElements.objLoader);
 helper.eventHandlers();
 scene.start(sceneElements.sceneGraph);
 requestAnimationFrame(scene.update);

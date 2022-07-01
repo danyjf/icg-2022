@@ -33,9 +33,6 @@ const helper = {
         htmlElement.appendChild(renderer.domElement);
 
         // Control for the camera
-        // sceneElements.control = new THREE.OrbitControls(camera, renderer.domElement);
-        // sceneElements.control.screenSpacePanning = true;
-
         sceneElements.control = new THREE.PointerLockControls(camera, renderer.domElement);
         const blocker = document.getElementById( 'blocker' );
         const instructions = document.getElementById( 'instructions' );
@@ -57,6 +54,14 @@ const helper = {
 
         // Add clock
         sceneElements.clock = new THREE.Clock();
+
+        // Add OBJLoader
+        sceneElements.objLoader = new THREE.OBJLoader();
+    },
+
+    loadObjects: async function loadObjects(loader) {
+        // Load flower object
+        objects.flowerObject = await sceneElements.objLoader.loadAsync("assets/models/flower.obj");
     },
 
     render: function render(sceneElements) {

@@ -1,7 +1,8 @@
 ﻿- [x] first person controls
 - [x] use shift to move faster
 - [x] textures on tree
-- [ ] textures on flower
+- [x] textures on flower
+- [ ] load flower geometries using wait
 - [ ] textures on grass
 - [ ] textures on torus
 - [ ] add rock

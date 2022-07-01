@@ -48,27 +48,6 @@ const scene = {
         sphere.name = "lightObject";
         sceneGraph.add(sphere);
 
-        // Test loading flower object
-        let loader = new THREE.OBJLoader();
-        loader.load('assets/models/flower.obj', function (object) {
-            objects.flowerObject = object;
-        });
-
-        // let loader = new THREE.OBJLoader();
-        // loader.load('assets/models/flower.obj', function (object) {
-        //     const petalMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
-        //     petalMaterial.side = THREE.DoubleSide;
-        //     object.children[0].material = petalMaterial;
-
-        //     const stemMaterial = new THREE.MeshPhongMaterial({color: 0x00ff00});
-        //     stemMaterial.side = THREE.DoubleSide;
-        //     object.children[1].material = stemMaterial;
-
-        //     object.position.set(0, 7, 20);
-
-        //     sceneGraph.add(object);
-        // });
-
         // Add objects to the scene
         sceneGraph.add(torus);
         torus.add(torusCenter);
