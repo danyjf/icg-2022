@@ -38,7 +38,7 @@ const scene = {
 
         // Test normal maps
         const light = new THREE.PointLight(0xffffff, 1, 2);
-        light.position.set(0, 9, 20);
+        light.position.set(20, 9, 0);
         light.name = "light";
         sceneGraph.add(light);
         const geometry = new THREE.SphereGeometry(0.03, 8, 4);
@@ -62,7 +62,7 @@ const scene = {
         ruins2.rotation.y = -Math.PI / 10;
         sceneGraph.add(ruins2);
         
-        const ruins3 = objects.createRock3(19, 8.8, 3)
+        const ruins3 = objects.createRock3(20, 8.8, 3)
         ruins3.name = "ruins3";
         ruins3.rotation.z = Math.PI / 6;
         sceneGraph.add(ruins3);
@@ -92,10 +92,11 @@ const scene = {
         const ruins2 = sceneElements.sceneGraph.getObjectByName("ruins2");
         const ruins3 = sceneElements.sceneGraph.getObjectByName("ruins3");
 
-        // Test normal maps
         const light = sceneElements.sceneGraph.getObjectByName("light");
-        light.position.x = Math.sin(time/1000) * 5;
         const lightObject = sceneElements.sceneGraph.getObjectByName("lightObject");
+
+        light.position.z = 1.5 + Math.sin(time/1000 / 2) * 4;
+        light.position.x = 20 + Math.sin(time/1000) * 2;
         lightObject.position.set(light.position.x, light.position.y, light.position.z);
 
         controls(torusCenter, torusTubeCenter);
