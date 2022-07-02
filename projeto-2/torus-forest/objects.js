@@ -178,7 +178,8 @@ const objects = {
         let rock = this.loadedObjects.rocks1Object.clone();
 
         const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
-        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+        const rocksNormalMap = new THREE.TextureLoader().load("assets/textures/stones/rocks1Normal.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture, normalMap: rocksNormalMap});
 
         rock.material = rocksMaterial;
         rock.castShadow = true;
@@ -194,7 +195,8 @@ const objects = {
         let rock = this.loadedObjects.rocks2Object.clone();
 
         const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
-        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+        const rocksNormalMap = new THREE.TextureLoader().load("assets/textures/stones/rocks1Normal.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture, normalMap: rocksNormalMap});
 
         rock.material = rocksMaterial;
         rock.castShadow = true;
@@ -210,7 +212,8 @@ const objects = {
         let rock = this.loadedObjects.rocks3Object.clone();
 
         const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
-        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+        const rocksNormalMap = new THREE.TextureLoader().load("assets/textures/stones/rocks1Normal.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture, normalMap: rocksNormalMap});
 
         rock.material = rocksMaterial;
         rock.castShadow = true;
@@ -226,7 +229,8 @@ const objects = {
         let rock = this.loadedObjects.rocks4Object.clone();
 
         const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
-        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+        const rocksNormalMap = new THREE.TextureLoader().load("assets/textures/stones/rocks1Normal.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture, normalMap: rocksNormalMap});
 
         rock.material = rocksMaterial;
         rock.castShadow = true;
