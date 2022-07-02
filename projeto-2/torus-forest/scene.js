@@ -48,6 +48,18 @@ const scene = {
         sphere.name = "lightObject";
         sceneGraph.add(sphere);
 
+        // Test add ruins
+        const stone01Texture = new THREE.TextureLoader().load("assets/textures/stones/stone01.jpg");
+        const stone01Material = new THREE.MeshPhongMaterial({map: stone01Texture});
+        sceneElements.objLoader.load("assets/models/stone01.obj", function(object) {
+            object = object.children[1];
+            object.material = stone01Material;
+
+            object.position.set(0, 7, 20);
+
+            sceneGraph.add(object);
+        });
+
         // Add objects to the scene
         sceneGraph.add(torus);
         torus.add(torusCenter);

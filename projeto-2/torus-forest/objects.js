@@ -193,7 +193,6 @@ const objects = {
         groundNormalMap.wrapT = THREE.RepeatWrapping;
         groundNormalMap.repeat.set(40, 25);
 
-        // const torusMaterial = new THREE.MeshPhongMaterial({color: color});
         const torusMaterial = new THREE.MeshPhongMaterial({map: groundTexture, normalMap: groundNormalMap});
         
         const torus = new THREE.Mesh(torusGeometry, torusMaterial);
