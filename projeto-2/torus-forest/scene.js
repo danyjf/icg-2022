@@ -53,6 +53,14 @@ const scene = {
         stone.name = "stone";
         sceneGraph.add(stone);
 
+        sceneGraph.add(objects.createRock1(0, 0, 0));
+        sceneGraph.add(objects.createRock2(2, 0, 0));
+        sceneGraph.add(objects.createRock3(4, 0, 0));
+        sceneGraph.add(objects.createRock4(6, 0, 0));
+        
+        sceneGraph.add(objects.createRock1(20, 8.8, 0));
+        sceneGraph.add(objects.createRock2(18, 8, 0));
+
         // Add objects to the scene
         sceneGraph.add(torus);
         torus.add(torusCenter);

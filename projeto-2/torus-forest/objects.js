@@ -6,7 +6,11 @@ const objects = {
     loadedObjects: {
         flowerObject: null,
         grassObject: null,
-        stone01Object: null
+        stone01Object: null,
+        rocks1Object: null,
+        rocks2Object: null,
+        rocks3Object: null,
+        rocks4Object: null,
     },
 
     createFlower: function createFlower(posX, posY, posZ) {
@@ -168,6 +172,70 @@ const objects = {
         stone.position.set(posX, posY, posZ);
 
         return stone;
+    },
+
+    createRock1: function createRock1(posX, posY, posZ) {
+        let rock = this.loadedObjects.rocks1Object.clone();
+
+        const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+
+        rock.material = rocksMaterial;
+        rock.castShadow = true;
+        rock.receiveShadow = true;
+
+        rock.position.set(posX, posY, posZ);
+        rock.scale.set(0.5, 0.5, 0.5);
+
+        return rock;
+    },
+
+    createRock2: function createRock2(posX, posY, posZ) {
+        let rock = this.loadedObjects.rocks2Object.clone();
+
+        const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+
+        rock.material = rocksMaterial;
+        rock.castShadow = true;
+        rock.receiveShadow = true;
+
+        rock.position.set(posX, posY, posZ);
+        rock.scale.set(0.5, 0.5, 0.5);
+
+        return rock;
+    },
+
+    createRock3: function createRock3(posX, posY, posZ) {
+        let rock = this.loadedObjects.rocks3Object.clone();
+
+        const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+
+        rock.material = rocksMaterial;
+        rock.castShadow = true;
+        rock.receiveShadow = true;
+
+        rock.position.set(posX, posY, posZ);
+        rock.scale.set(0.5, 0.5, 0.5);
+
+        return rock;
+    },
+
+    createRock4: function createRock4(posX, posY, posZ) {
+        let rock = this.loadedObjects.rocks4Object.clone();
+
+        const rocksTexture = new THREE.TextureLoader().load("assets/textures/stones/rocks1Color.png");
+        const rocksMaterial = new THREE.MeshPhongMaterial({map: rocksTexture});
+
+        rock.material = rocksMaterial;
+        rock.castShadow = true;
+        rock.receiveShadow = true;
+
+        rock.position.set(posX, posY, posZ);
+        rock.scale.set(0.5, 0.5, 0.5);
+
+        return rock;
     },
 
     createRandomObject: function createRandomObject(posX, posY, posZ) {

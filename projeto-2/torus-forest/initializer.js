@@ -8,11 +8,12 @@ const sceneElements = {
     renderer: null,
     raycaster: null,
     clock: null,
-    objLoader: null
+    objLoader: null,
+    fbxLoader: null
 };
 
 helper.initEmptyScene(sceneElements);
-helper.loadObjects(sceneElements.objLoader).then(() => {
+helper.loadObjects(sceneElements).then(() => {
     helper.eventHandlers();
     scene.start(sceneElements.sceneGraph);
     requestAnimationFrame(scene.update);

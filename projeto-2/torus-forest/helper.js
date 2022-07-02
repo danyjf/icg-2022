@@ -57,18 +57,27 @@ const helper = {
 
         // Add OBJLoader
         sceneElements.objLoader = new THREE.OBJLoader();
+
+        // Add FBXLoader
+        sceneElements.fbxLoader = new THREE.FBXLoader();
     },
 
-    loadObjects: async function loadObjects(loader) {
+    loadObjects: async function loadObjects(sceneElements) {
         // Load flower object
-        objects.loadedObjects.flowerObject = await loader.loadAsync("assets/models/flower.obj");
+        objects.loadedObjects.flowerObject = await sceneElements.objLoader.loadAsync("assets/models/flower.obj");
 
         // Load grass object
-        objects.loadedObjects.grassObject = await loader.loadAsync("assets/models/grass.obj");
+        objects.loadedObjects.grassObject = await sceneElements.objLoader.loadAsync("assets/models/grass.obj");
 
         // Load stone01 object
-        const stoneFull = await loader.loadAsync("assets/models/stone01.obj");
+        const stoneFull = await sceneElements.objLoader.loadAsync("assets/models/stone01.obj");
         objects.loadedObjects.stone01Object = stoneFull.children[1];
+
+        const rocksFull = await sceneElements.fbxLoader.loadAsync("assets/models/rocks1.fbx");
+        objects.loadedObjects.rocks1Object = rocksFull.children[0];
+        objects.loadedObjects.rocks2Object = rocksFull.children[1];
+        objects.loadedObjects.rocks3Object = rocksFull.children[2];
+        objects.loadedObjects.rocks4Object = rocksFull.children[3];
     },
 
     render: function render(sceneElements) {
