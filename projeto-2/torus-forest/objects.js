@@ -5,7 +5,8 @@ const objects = {
 
     loadedObjects: {
         flowerObject: null,
-        grassObject: null
+        grassObject: null,
+        stone01Object: null
     },
 
     createFlower: function createFlower(posX, posY, posZ) {
@@ -152,6 +153,21 @@ const objects = {
             isDying: false, 
             isDead: false
         };
+    },
+
+    createStone01: function createStone01(posX, posY, posZ) {
+        let stone = this.loadedObjects.stone01Object.clone();
+
+        const stone01Texture = new THREE.TextureLoader().load("assets/textures/stones/stone01.jpg");
+        const stone01Material = new THREE.MeshPhongMaterial({map: stone01Texture});
+
+        stone.material = stone01Material;
+        stone.castShadow = true;
+        stone.receiveShadow = true;
+
+        stone.position.set(posX, posY, posZ);
+
+        return stone;
     },
 
     createRandomObject: function createRandomObject(posX, posY, posZ) {

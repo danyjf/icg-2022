@@ -65,6 +65,10 @@ const helper = {
 
         // Load grass object
         objects.loadedObjects.grassObject = await loader.loadAsync("assets/models/grass.obj");
+
+        // Load stone01 object
+        const stoneFull = await loader.loadAsync("assets/models/stone01.obj");
+        objects.loadedObjects.stone01Object = stoneFull.children[1];
     },
 
     render: function render(sceneElements) {
@@ -177,11 +181,11 @@ const helper = {
 
     raycast: function raycast(origin, direction, mesh) {
         sceneElements.raycaster.set(origin, direction);
-        const intersects = sceneElements.raycaster.intersectObject(mesh)[0];
-    
-        if(intersects) {
+        const intersects = sceneElements.raycaster.intersectObjects(mesh)[0];
+
+        if(intersects && intersects.object.name == "torus") {
             let normal = intersects.face.normal.clone();
-            normal.transformDirection(mesh.matrixWorld);
+            normal.transformDirection(mesh[0].matrixWorld);
             normal.add(intersects.point);
     
             return {point: intersects.point, normal: normal};

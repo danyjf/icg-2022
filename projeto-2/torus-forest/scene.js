@@ -49,16 +49,9 @@ const scene = {
         sceneGraph.add(sphere);
 
         // Test add ruins
-        const stone01Texture = new THREE.TextureLoader().load("assets/textures/stones/stone01.jpg");
-        const stone01Material = new THREE.MeshPhongMaterial({map: stone01Texture});
-        sceneElements.objLoader.load("assets/models/stone01.obj", function(object) {
-            object = object.children[1];
-            object.material = stone01Material;
-
-            object.position.set(0, 7, 20);
-
-            sceneGraph.add(object);
-        });
+        const stone = objects.createStone01(0, 7, 20);
+        stone.name = "stone";
+        sceneGraph.add(stone);
 
         // Add objects to the scene
         sceneGraph.add(torus);
@@ -78,6 +71,7 @@ const scene = {
         const lampWorldPosition = new THREE.Vector3();
         lamp.getWorldPosition(lampWorldPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
+        const stone = sceneElements.sceneGraph.getObjectByName("stone");
         const deltaTime = sceneElements.clock.getDelta();
 
         // Test normal maps
@@ -209,7 +203,7 @@ const scene = {
             let direction = helper.getRandomDirection();
             direction.transformDirection(lamp.matrixWorld);
             
-            const instanceInfo = helper.raycast(lampWorldPosition, direction, torus);
+            const instanceInfo = helper.raycast(lampWorldPosition, direction, [torus, stone]);
             if(instanceInfo) {
                 const point = instanceInfo.point;
                 const normal = instanceInfo.normal;

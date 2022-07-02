@@ -12,7 +12,8 @@ const sceneElements = {
 };
 
 helper.initEmptyScene(sceneElements);
-helper.loadObjects(sceneElements.objLoader);
-helper.eventHandlers();
-scene.start(sceneElements.sceneGraph);
-requestAnimationFrame(scene.update);
+helper.loadObjects(sceneElements.objLoader).then(() => {
+    helper.eventHandlers();
+    scene.start(sceneElements.sceneGraph);
+    requestAnimationFrame(scene.update);
+});

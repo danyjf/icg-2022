@@ -6,9 +6,10 @@
 - [x] textures on grass
 - [x] textures on torus
 - [ ] add ruins
-- [ ] make objects not spawn on top of ruins
+- [x] make objects not spawn on top of ruins
 - [ ] textures on ruins
 - [ ] fireflies around ruins
-- [ ] add rock
-- [ ] make objects not spawn on top of rocks
+- [x] add rock
+- [ ] textures on rock
+- [x] make objects not spawn on top of rocks
 - [ ] adjust ambient light
