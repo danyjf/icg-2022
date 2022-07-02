@@ -53,13 +53,19 @@ const scene = {
         stone.name = "stone";
         sceneGraph.add(stone);
 
-        sceneGraph.add(objects.createRock1(0, 0, 0));
-        sceneGraph.add(objects.createRock2(2, 0, 0));
-        sceneGraph.add(objects.createRock3(4, 0, 0));
-        sceneGraph.add(objects.createRock4(6, 0, 0));
+        const ruins1 = objects.createRock1(20, 8.8, 0);
+        ruins1.name = "ruins1";
+        sceneGraph.add(ruins1);
         
-        sceneGraph.add(objects.createRock1(20, 8.8, 0));
-        sceneGraph.add(objects.createRock2(18, 8, 0));
+        const ruins2 = objects.createRock2(18, 8, 0);
+        ruins2.name = "ruins2";
+        ruins2.rotation.y = -Math.PI / 10;
+        sceneGraph.add(ruins2);
+        
+        const ruins3 = objects.createRock3(19, 8.8, 3)
+        ruins3.name = "ruins3";
+        ruins3.rotation.z = Math.PI / 6;
+        sceneGraph.add(ruins3);
 
         // Add objects to the scene
         sceneGraph.add(torus);
@@ -79,8 +85,12 @@ const scene = {
         const lampWorldPosition = new THREE.Vector3();
         lamp.getWorldPosition(lampWorldPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
-        const stone = sceneElements.sceneGraph.getObjectByName("stone");
         const deltaTime = sceneElements.clock.getDelta();
+
+        const stone = sceneElements.sceneGraph.getObjectByName("stone");
+        const ruins1 = sceneElements.sceneGraph.getObjectByName("ruins1");
+        const ruins2 = sceneElements.sceneGraph.getObjectByName("ruins2");
+        const ruins3 = sceneElements.sceneGraph.getObjectByName("ruins3");
 
         // Test normal maps
         const light = sceneElements.sceneGraph.getObjectByName("light");
@@ -211,7 +221,7 @@ const scene = {
             let direction = helper.getRandomDirection();
             direction.transformDirection(lamp.matrixWorld);
             
-            const instanceInfo = helper.raycast(lampWorldPosition, direction, [torus, stone]);
+            const instanceInfo = helper.raycast(lampWorldPosition, direction, [torus, stone, ruins1, ruins2, ruins3]);
             if(instanceInfo) {
                 const point = instanceInfo.point;
                 const normal = instanceInfo.normal;
