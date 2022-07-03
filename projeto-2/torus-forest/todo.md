@@ -5,11 +5,11 @@
 - [x] load flower geometries using wait
 - [x] textures on grass
 - [x] textures on torus
-- [ ] add ruins
+- [x] add ruins
 - [x] make objects not spawn on top of ruins
-- [ ] textures on ruins
-- [ ] fireflies around ruins
+- [x] textures on ruins
+- [x] fireflies around ruins
 - [x] add rock
-- [ ] textures on rock
+- [x] textures on rock
 - [x] make objects not spawn on top of rocks
 - [ ] adjust ambient light
