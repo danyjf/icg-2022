@@ -48,11 +48,12 @@ const scene = {
         sphere.name = "lightObject";
         sceneGraph.add(sphere);
 
-        // Test add ruins
+        // Add stones
         const stone = objects.createStone01(0, 7, 20);
         stone.name = "stone";
         sceneGraph.add(stone);
 
+        // Add first set of ruins
         const ruins1 = objects.createRock1(20, 8.8, 0);
         ruins1.name = "ruins1";
         sceneGraph.add(ruins1);
@@ -62,10 +63,43 @@ const scene = {
         ruins2.rotation.y = -Math.PI / 10;
         sceneGraph.add(ruins2);
         
-        const ruins3 = objects.createRock3(20, 8.8, 3)
+        const ruins3 = objects.createRock3(20, 8.8, 3);
         ruins3.name = "ruins3";
         ruins3.rotation.z = Math.PI / 6;
         sceneGraph.add(ruins3);
+
+        // Add second set of ruins
+        const ruins4 = objects.createRock4(-29.8, 0, 0);
+        ruins4.name = "ruins4";
+        ruins4.rotation.y = Math.PI / 2;
+        sceneGraph.add(ruins4);
+
+        const ruins5 = objects.createRock1(-28.5, 0, 5);
+        ruins5.name = "ruins5";
+        ruins5.rotation.y = Math.PI / 2;
+        sceneGraph.add(ruins5);
+
+        const ruins6 = objects.createRock2(-27.9, 2, 3);
+        ruins6.name = "ruins6";
+        ruins6.rotation.y = Math.PI / 2;
+        sceneGraph.add(ruins6);
+
+        // Add third set of ruins
+        const ruins7 = objects.createRock3(0, 0, -11);
+        ruins7.name = "ruins7";
+        ruins7.rotation.x = Math.PI;
+        sceneGraph.add(ruins7);
+
+        const ruins8 = objects.createRock4(3.5, 1.5, -10);
+        ruins8.name = "ruins8";
+        ruins8.rotation.x = Math.PI;
+        ruins8.rotation.y = Math.PI / 10;
+        sceneGraph.add(ruins8);
+
+        const ruins9 = objects.createRock1(2, -2, -11.2);
+        ruins9.name = "ruins9";
+        ruins9.rotation.x = Math.PI;
+        sceneGraph.add(ruins9);
 
         // Add objects to the scene
         sceneGraph.add(torus);
@@ -86,11 +120,6 @@ const scene = {
         lamp.getWorldPosition(lampWorldPosition);
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
         const deltaTime = sceneElements.clock.getDelta();
-
-        const stone = sceneElements.sceneGraph.getObjectByName("stone");
-        const ruins1 = sceneElements.sceneGraph.getObjectByName("ruins1");
-        const ruins2 = sceneElements.sceneGraph.getObjectByName("ruins2");
-        const ruins3 = sceneElements.sceneGraph.getObjectByName("ruins3");
 
         const light = sceneElements.sceneGraph.getObjectByName("light");
         const lightObject = sceneElements.sceneGraph.getObjectByName("lightObject");
@@ -222,7 +251,7 @@ const scene = {
             let direction = helper.getRandomDirection();
             direction.transformDirection(lamp.matrixWorld);
             
-            const instanceInfo = helper.raycast(lampWorldPosition, direction, [torus, stone, ruins1, ruins2, ruins3]);
+            const instanceInfo = helper.raycast(lampWorldPosition, direction, torus);
             if(instanceInfo) {
                 const point = instanceInfo.point;
                 const normal = instanceInfo.normal;

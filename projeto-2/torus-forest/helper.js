@@ -190,11 +190,11 @@ const helper = {
 
     raycast: function raycast(origin, direction, mesh) {
         sceneElements.raycaster.set(origin, direction);
-        const intersects = sceneElements.raycaster.intersectObjects(mesh)[0];
+        const intersects = sceneElements.raycaster.intersectObjects(sceneElements.sceneGraph.children)[0];
 
         if(intersects && intersects.object.name == "torus") {
             let normal = intersects.face.normal.clone();
-            normal.transformDirection(mesh[0].matrixWorld);
+            normal.transformDirection(mesh.matrixWorld);
             normal.add(intersects.point);
     
             return {point: intersects.point, normal: normal};
