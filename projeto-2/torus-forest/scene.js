@@ -37,17 +37,15 @@ const scene = {
         lamp.name = "lamp";
 
         // Add firefly
-        const firefly = new THREE.PointLight(0xffffff, 1, 2);
+        const fireflyGeometry = new THREE.SphereGeometry(0.03, 8, 4);
+        const fireflyMaterial = new THREE.MeshBasicMaterial({color: 0xffff00});
+        const firefly = new THREE.Mesh(fireflyGeometry, fireflyMaterial);
         firefly.position.set(20, 9, 0);
         firefly.name = "firefly";
         sceneGraph.add(firefly);
-        const geometry = new THREE.SphereGeometry(0.03, 8, 4);
-        const material = new THREE.MeshBasicMaterial({color: 0xffff00});
-        const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.set(firefly.position.x, firefly.position.y, firefly.position.z);
-        sphere.name = "fireflyObject";
-        sceneGraph.add(sphere);
-
+        const fireflyLight = new THREE.PointLight(0xffffff, 1, 2);
+        firefly.add(fireflyLight);
+        
         // Add stones
         const stone = objects.createStone01(0, 7, 20);
         stone.name = "stone";
@@ -121,12 +119,10 @@ const scene = {
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
         const deltaTime = sceneElements.clock.getDelta();
 
-        const light = sceneElements.sceneGraph.getObjectByName("firefly");
-        const lightObject = sceneElements.sceneGraph.getObjectByName("fireflyObject");
+        const firefly = sceneElements.sceneGraph.getObjectByName("firefly");
 
-        light.position.z = 1.5 + Math.sin(time/1000 / 2) * 4;
-        light.position.x = 20 + Math.sin(time/1000) * 2;
-        lightObject.position.set(light.position.x, light.position.y, light.position.z);
+        firefly.position.z = 1.5 + Math.sin(time/1000 / 2) * 4;
+        firefly.position.x = 20 + Math.sin(time/1000) * 2;
 
         controls(torusCenter, torusTubeCenter);
         
