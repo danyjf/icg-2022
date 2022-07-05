@@ -161,6 +161,7 @@ const scene = {
                 if(sceneObjects[i].object3D.scale.x < 0) {
                     sceneElements.sceneGraph.remove(sceneObjects[i].object3D);
                     sceneObjects.splice(i, 1);
+                    continue;
                 }
             }
 
