@@ -1,7 +1,7 @@
 "use strict";
 
 const SPAWN_TIME = 0.25;
-const MAX_OBJECTS = 1000;
+const MAX_OBJECTS = 1;
 
 let sceneObjects = [];
 let spawnTimer = 0;
@@ -36,16 +36,16 @@ const scene = {
         lamp.position.set(0, 15, 0);
         lamp.name = "lamp";
 
-        // Test normal maps
-        const light = new THREE.PointLight(0xffffff, 1, 2);
-        light.position.set(20, 9, 0);
-        light.name = "light";
-        sceneGraph.add(light);
+        // Add firefly
+        const firefly = new THREE.PointLight(0xffffff, 1, 2);
+        firefly.position.set(20, 9, 0);
+        firefly.name = "firefly";
+        sceneGraph.add(firefly);
         const geometry = new THREE.SphereGeometry(0.03, 8, 4);
         const material = new THREE.MeshBasicMaterial({color: 0xffff00});
         const sphere = new THREE.Mesh(geometry, material);
-        sphere.position.set(light.position.x, light.position.y, light.position.z);
-        sphere.name = "lightObject";
+        sphere.position.set(firefly.position.x, firefly.position.y, firefly.position.z);
+        sphere.name = "fireflyObject";
         sceneGraph.add(sphere);
 
         // Add stones
@@ -121,8 +121,8 @@ const scene = {
         const torus = sceneElements.sceneGraph.getObjectByName("torus");
         const deltaTime = sceneElements.clock.getDelta();
 
-        const light = sceneElements.sceneGraph.getObjectByName("light");
-        const lightObject = sceneElements.sceneGraph.getObjectByName("lightObject");
+        const light = sceneElements.sceneGraph.getObjectByName("firefly");
+        const lightObject = sceneElements.sceneGraph.getObjectByName("fireflyObject");
 
         light.position.z = 1.5 + Math.sin(time/1000 / 2) * 4;
         light.position.x = 20 + Math.sin(time/1000) * 2;
