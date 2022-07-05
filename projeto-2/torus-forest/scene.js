@@ -193,8 +193,7 @@ const scene = {
 
         // Rendering
         helper.render(sceneElements);
-        // Update control of the camera
-        // sceneElements.control.update(deltaTime);
+
         // Call for the next frame
         requestAnimationFrame(update);
 

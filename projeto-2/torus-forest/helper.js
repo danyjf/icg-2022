@@ -60,6 +60,17 @@ const helper = {
 
         // Add FBXLoader
         sceneElements.fbxLoader = new THREE.FBXLoader();
+
+        // Add skybox
+        const skybox = new THREE.CubeTextureLoader().load([
+            "assets/textures/skybox/right.png",
+            "assets/textures/skybox/left.png",
+            "assets/textures/skybox/top.png",
+            "assets/textures/skybox/bot.png",
+            "assets/textures/skybox/front.png",
+            "assets/textures/skybox/back.png",
+        ]);
+        sceneElements.sceneGraph.background = skybox;
     },
 
     loadObjects: async function loadObjects(sceneElements) {
