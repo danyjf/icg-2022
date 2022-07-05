@@ -1,7 +1,7 @@
 "use strict";
 
 const SPAWN_TIME = 0.25;
-const MAX_OBJECTS = 1;
+const MAX_OBJECTS = 1000;
 
 let sceneObjects = [];
 let spawnTimer = 0;
